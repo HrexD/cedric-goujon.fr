@@ -73,6 +73,33 @@ $data = json_decode(file_get_contents("data.json"), true);
   <?php endforeach; ?>
 </section>
 
+<section id="github-projects">
+  <h2><i class="fab fa-github"></i> Projets GitHub</h2>
+  <div id="repo-container" class="repo-grid"></div>
+</section>
+<script>
+  const username = "HrexD";
+  const container = document.getElementById("repo-container");
+
+  fetch(`https://api.github.com/users/${username}/repos`)
+    .then(res => res.json())
+    .then(repos => {
+      repos
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)) 
+        .forEach(repo => {
+          const card = document.createElement("div");
+          card.className = "repo-card";
+          card.innerHTML = `
+            <h3>${repo.name}</h3>
+            <p>${repo.description || "Aucune description fournie."}</p>
+            <a class="repo-link" href="${repo.html_url}" target="_blank">Voir sur GitHub</a>
+          `;
+          container.appendChild(card);
+        });
+    });
+</script>
+
+
 <section>
   <h2><i class="fas fa-language"></i> Langues</h2>
   <ul>
