@@ -1,0 +1,140 @@
+{
+  "nom": "Cédric GOUJON",
+  "naissance": "12/06/1995",
+  "age": 30 ,
+  "telephone": "06.51.77.97.80",
+  "email": "cedric.adam.goujon@gmail.com",
+  "adresse": "5 Résidence du Clos Saint Vigor, 78220 Viroflay",
+  "permis": "Permis B / Véhicule",
+  "github": "https://github.com/HrexD",
+  "linkedin": "https://www.linkedin.com/in/cédric-goujon-884522b6/",
+  "langues": {
+    "anglais": "B1/B2",
+    "allemand": "B1/B2"
+  },
+  "competences": [
+    "HTML / CSS",
+    "PHP / Symfony",
+    "MySQL / PostgreSQL",
+    "Javascript / React",
+    "Python, Java",
+    "AMQP (RabbitMQ)",
+    "Git / GitLab / GitHub",
+    "Suite Adobe: Photoshop / Illustrator / InDesign",
+    "Figma"
+  ],
+  "interets": [
+    "Arts numériques",
+    "Jeux vidéos",
+    "Sports (Basket / Natation / Fitness)"
+  ],
+  "experiences": [
+    {
+      "periode": "Oct. 2024 – Avril 2025",
+      "poste": "Développeur Web FullStack",
+      "entreprise": "Free Mobile",
+      "missions": [
+        "Développement d’une Application Web pour les collaborateurs",
+        "Langages : Symfony / PHP / Docker / Doctrine / GitLab / Twig / WebPack / Scrum"
+      ]
+    },
+    {
+      "periode": "Sept. 2022 – Sept. 2024",
+      "poste": "Alternant Développeur Web",
+      "entreprise": "MCRA (Groupe Iliad - Free)",
+      "missions": [
+        "Conception d’un automate de prospection téléphonique",
+        "Langages : PHP / SFTP / MySQL",
+        "Système de statistiques abonnés",
+        "Langages : HTML / CSS / PHP / SQL",
+        "Variables en centre d’appels",
+        "Langages : Symfony / HTML",
+        "Communication automatisée (email/SMS)",
+        "Langages : PHP / MySQL",
+        "Intégration continue (CI/CD)",
+        "Langages : Git / Yaml",
+        "Évolutions outils de gestion des documents",
+        "Langages : PHP / HTML / CSS / MySQL",
+        "Connexion à un système API externe",
+        "Langages : PHP"
+      ]
+    },
+    {
+      "periode": "Sept. 2018 – Sept. 2022",
+      "poste": "Technicien Informatique et Bureautique",
+      "entreprise": "Free",
+      "missions": [
+        "Maintenance de l’intranet",
+        "Support de proximité et à distance",
+        "Gestion Active Directory / Intranet",
+        "Gestion des licences",
+        "Parc informatique",
+        "Installation / Configuration VPN"
+      ]
+    },
+    {
+      "periode": "Juin 2018 – Août 2018",
+      "poste": "Stagiaire Assistant Chargé de Mission et Développeur Web",
+      "entreprise": "Fondation Free",
+      "missions": [
+        "Création de contenu (Photoshop, Illustrator)",
+        "Masques de diapositive, template",
+        "Développement Intranet (maquette)"
+      ]
+    },
+    {
+      "periode": "Mai 2017 – Juillet 2017",
+      "poste": "Stagiaire Gestionnaire Web",
+      "entreprise": "Adeline Klam Créations Paris",
+      "missions": [
+        "Gestion site Web / SEO / Communication / Mailing"
+      ]
+    },
+    {
+      "periode": "Juillet 2016 – Août 2016",
+      "poste": "Stagiaire Communication",
+      "entreprise": "Mediapost Paris",
+      "missions": [
+        "Communication numérique",
+        "Création d’infographies et logotypes"
+      ]
+    }
+  ],
+  "formations": [
+    {
+      "periode": "2022 – 2024",
+      "diplome": "Mastère Informatique Expert en Études et Développement du SI",
+      "etablissement": "H3 HITEMA",
+      "details": [
+        "Analyse et définition des orientations stratégiques",
+        "Pilotage de projet",
+        "Déploiement de solutions applicatives",
+        "Projet ARCHAE : appli mobile de chasse au trésor sur Paris (JAVA/XML)"
+      ]
+    },
+    {
+      "periode": "2020 – 2022",
+      "diplome": "Autoformation",
+      "etablissement": "LinkedIn Learning",
+      "details": [
+        "Javascript / HTML / CSS / Webpack 4 / Ajax / JSON"
+      ]
+    },
+    {
+      "periode": "2017 – 2018",
+      "diplome": "Bachelor Création Numérique / Licence 3 METWEB ",
+      "etablissement": "UQAT / IUT de Vélizy",
+      "details": [
+        "3D, Web, Design numérique"
+      ]
+    },
+    {
+      "periode": "2015 – 2017",
+      "diplome": "DUT MMI",
+      "etablissement": "IUT de Vélizy",
+      "details": [
+        "Web / Multimédia / Audiovisuelle / Graphisme / Communication"
+      ]
+    }
+  ]
+}
