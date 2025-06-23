@@ -75,29 +75,42 @@ $data = json_decode(file_get_contents("data.json"), true);
 
 <section id="github-projects">
   <h2><i class="fab fa-github"></i> Projets GitHub</h2>
-  <div id="repo-container" class="repo-grid"></div>
+
+  <h3>🛠️ Projets Perso / Pro</h3>
+  <div id="repo-perso" class="repo-grid"></div>
+
+  <h3>🎓 Projets de Cours</h3>
+  <div id="repo-cours" class="repo-grid"></div>
 </section>
+
 <script>
   const username = "HrexD";
-  const container = document.getElementById("repo-container");
+  const persoContainer = document.getElementById("repo-perso");
+  const coursContainer = document.getElementById("repo-cours");
 
   fetch(`https://api.github.com/users/${username}/repos`)
     .then(res => res.json())
     .then(repos => {
       repos
-        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)) 
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
         .forEach(repo => {
+          const year = new Date(repo.created_at).getFullYear();
+          const isCourse = year < 2025;
+
           const card = document.createElement("div");
           card.className = "repo-card";
           card.innerHTML = `
-            <h3>${repo.name}</h3>
+            <h4><a href="${repo.html_url}" target="_blank">${repo.name}</a></h4>
             <p>${repo.description || "Aucune description fournie."}</p>
             <a class="repo-link" href="${repo.html_url}" target="_blank">Voir sur GitHub</a>
           `;
-          container.appendChild(card);
+
+          (isCourse ? coursContainer : persoContainer).appendChild(card);
         });
     });
 </script>
+
+
 
 
 <section>
