@@ -1,26 +1,35 @@
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
 
-    :root {
-      --primary: #4e6e81;
-      --secondary: #89b0ae;
-      --background: #0f1115;
-      --surface: #1a1c20;
-      --text: #f1f1f1;
-      --text-muted: #a0a5b0;
-      --accent: #f08a5d;
-      --radius: 10px;
-      --shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-      --font: 'Inter', sans-serif;
-      --font-mono: 'Fira Code', monospace;
-    }
+:root, html {
+  --primary: #4e6e81;
+  --secondary: #89b0ae;
+  --background: #0f1115;
+  --surface: #1a1c20;
+  --text: #f1f1f1;
+  --text-muted: #a0a5b0;
+  --accent: #f08a5d;
+  --radius: 10px;
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  --font: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
 
-    body {
-      background-color: var(--background);
-      color: var(--text);
-      font-family: var(--font);
-      padding: 2rem;
-      transition: background-color 0.4s, color 0.4s;
-    }
+:root.light-theme, html.light-theme {
+  --background: #f0f0f0;
+  --surface: #ffffff;
+  --text: #222222;
+  --text-muted: #555555;
+  --primary: #4e6e81;
+  --secondary: #89b0ae;
+  --accent: #f08a5d;
+}
+
+body {
+  background-color: var(--background) !important;
+  color: var(--text) !important;
+  font-family: var(--font);
+  padding: 2rem;
+  transition: background-color 0.4s, color 0.4s;
+}
 
     header {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -171,8 +180,9 @@ ul li.subpoint::before {
 
 .repo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, 300px);
   gap: 1.5rem;
+  justify-content: center;
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
@@ -183,6 +193,14 @@ ul li.subpoint::before {
   padding: 1.5rem;
   box-shadow: var(--shadow);
   transition: transform 0.2s ease;
+
+  width: 250px;
+  height: 150px;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .repo-card:hover {
@@ -212,7 +230,20 @@ ul li.subpoint::before {
   text-decoration: underline;
 }
 
+nav {
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
 
+nav a {
+  color: var(--accent);
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
 
 
 
