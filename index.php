@@ -1,149 +1,203 @@
 <?php
-$data = json_decode(file_get_contents("data.json"), true);
+require 'config.php';
+
+$user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
+$userid = $user['id'];
+
+$experiences = $pdo->query("
+  SELECT ep.*, me.mission
+  FROM experiences_pro ep
+  LEFT JOIN missions_experience me ON ep.id = me.experience_id
+  WHERE ep.utilisateur_id = $userid
+  ORDER BY ep.id, me.id
+")->fetchAll();
+
+$formations = $pdo->query("
+  SELECT f.*, df.detail
+  FROM formations f
+  LEFT JOIN details_formation df ON f.id = df.formation_id
+  WHERE f.utilisateur_id = $userid
+  ORDER BY f.id, df.id
+")->fetchAll();
+
+$langues = $pdo->query("SELECT langue, niveau FROM langues WHERE utilisateur_id = $userid")->fetchAll();
+$softskills = $pdo->query("SELECT skill FROM soft_skills WHERE utilisateur_id = $userid")->fetchAll();
+$interets = $pdo->query("SELECT interet FROM interets WHERE utilisateur_id = $userid")->fetchAll();
+$technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id = $userid")->fetchAll();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>CV de <?= $data["nom"] ?></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-  <!-- Font Awesome -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV de <?= $user["nom"] ?></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<button id="theme-toggle" title="Changer le thème">🌙 Mode sombre</button>
+<button id="theme-toggle">🌙</button>
 
 <header>
-  <h1><i class="fas fa-user-circle"></i> <?= $data["nom"] ?></h1>
-  <p><strong>Développeur Fullstack Junior – PHP/Symfony & JavaScript/React</strong></p>
-  <p><i class="fas fa-location-dot"></i> <?= $data["adresse"] ?></p>
-  <p>
-    <i class="fas fa-phone"></i> <?= $data["telephone"] ?> · 
-    <i class="fas fa-envelope"></i> <a href="mailto:<?= $data["email"] ?>"><?= $data["email"] ?></a>
-  </p>
-  <p>
-    <i class="fas fa-car"></i> <?= $data["permis"] ?> · 
-    <i class="fas fa-cake-candles"></i> <?= $data["age"] ?> ans
-  </p>
-  <p>
-    <i class="fab fa-github"></i> <a href="<?= $data["github"] ?>">GitHub</a> · 
-    <i class="fab fa-linkedin"></i> <a href="<?= $data["linkedin"] ?>">LinkedIn</a>
-  </p>
+  <h1><?= $user["nom"] ?></h1>
+  <p>Développeur Fullstack Junior – PHP/Symfony & JavaScript/React</p>
+  <p><?= $user["adresse"] ?> · <?= $user["telephone"] ?> · <a href="mailto:<?= $user["email"] ?>"><?= $user["email"] ?></a></p>
+  <p><?= $user["permis"] ?> · <?= $user["age"] ?> ans</p>
+  <p><a href="<?= $user["github"] ?>">GitHub</a> · <a href="<?= $user["linkedin"] ?>">LinkedIn</a></p>
 </header>
 
 <section>
-  <h2><i class="fas fa-cogs"></i> Langages connus</h2>
+  <h2>Langues</h2>
   <ul>
-    <?php foreach ($data["competences"] as $c): ?>
-      <li><?= $c ?></li>
+    <?php foreach ($langues as $l): ?>
+      <li><?= ucfirst($l['langue']) ?> : <?= $l['niveau'] ?></li>
     <?php endforeach; ?>
   </ul>
 </section>
 
 <section>
-  <h2><i class="fas fa-briefcase"></i> Expériences Professionnelles</h2>
-  <?php foreach ($data["experiences"] as $exp): ?>
-    <div class="experience">
-      <h3><?= $exp["poste"] ?> — <?= $exp["entreprise"] ?></h3>
-      <p><em><i class="fas fa-calendar-alt"></i> <?= $exp["periode"] ?></em></p>
-      <ul>
-        <?php foreach ($exp["missions"] as $m): ?>
-          <li><?= $m ?></li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
+  <h2>Compétences techniques</h2>
+  <?php
+    $grouped = ['langage' => [], 'bdd' => [], 'application' => []];
+    foreach ($technos as $t) {
+      $grouped[$t['type']][] = $t['nom'];
+    }
+  ?>
+  <?php foreach ($grouped as $type => $items): ?>
+    <h3><?= ucfirst($type) ?>s</h3>
+    <ul>
+      <?php foreach ($items as $i): ?>
+        <li><?= $i ?></li>
+      <?php endforeach; ?>
+    </ul>
   <?php endforeach; ?>
 </section>
 
 <section>
-  <h2><i class="fas fa-graduation-cap"></i> Formations</h2>
-  <?php foreach ($data["formations"] as $f): ?>
-    <div class="formation">
-      <h3><?= $f["diplome"] ?> — <?= $f["etablissement"] ?></h3>
-      <p><em><i class="fas fa-calendar-alt"></i> <?= $f["periode"] ?></em></p>
-      <ul>
-        <?php foreach ($f["details"] as $d): ?>
-          <li><?= $d ?></li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
-  <?php endforeach; ?>
+  <h2>Expériences professionnelles</h2>
+  <div class="timeline">
+    <?php
+      $currentId = null;
+      $missionsBuffer = [];
+
+      foreach ($experiences as $exp) {
+        if ($exp['id'] !== $currentId) {
+          if ($currentId !== null) {
+            echo '<ul>';
+            foreach ($missionsBuffer as $m) {
+              $isSub = str_starts_with(trim($m), '-');
+              $class = $isSub ? ' class="subpoint"' : '';
+              $text = $isSub ? ltrim($m, '- ') : $m;
+              echo "<li{$class}>" . htmlspecialchars($text) . "</li>";
+            }
+            echo '</ul></div>';
+          }
+
+          $currentId = $exp['id'];
+          $missionsBuffer = [];
+          echo "<div class='timeline-item'><h3>{$exp['poste']} — {$exp['entreprise']}</h3><p><em>{$exp['periode']}</em></p>";
+        }
+
+        if (!empty($exp['mission'])) {
+          $missionsBuffer[] = $exp['mission'];
+        }
+      }
+
+      if ($currentId !== null) {
+        echo '<ul>';
+        foreach ($missionsBuffer as $m) {
+          $isSub = str_starts_with(trim($m), '-');
+          $class = $isSub ? ' class="subpoint"' : '';
+          $text = $isSub ? ltrim($m, '- ') : $m;
+          echo "<li{$class}>" . htmlspecialchars($text) . "</li>";
+        }
+        echo '</ul></div>';
+      }
+    ?>
+  </div>
+</section>
+
+
+<section>
+  <h2>Formations</h2>
+  <div class="timeline">
+    <?php
+      $currentId = null;
+      foreach ($formations as $f) {
+        if ($f['id'] !== $currentId) {
+          if ($currentId !== null) echo "</ul></div>";
+          $currentId = $f['id'];
+          echo "<div class='timeline-item'><h3>{$f['diplome']} — {$f['etablissement']}</h3><p><em>{$f['periode']}</em></p><ul>";
+        }
+        if ($f['detail']) echo "<li>{$f['detail']}</li>";
+      }
+      if ($currentId !== null) echo "</ul></div>";
+    ?>
+  </div>
 </section>
 
 <section id="github-projects">
   <h2><i class="fab fa-github"></i> Projets GitHub</h2>
 
-  <h3>🛠️ Projets Perso / Pro</h3>
-  <div id="repo-perso" class="repo-grid"></div>
+  <h3>🛠️ Projets 2025 et après</h3>
+  <div id="repos-post" class="repo-grid"></div>
 
-  <h3>🎓 Projets de Cours</h3>
-  <div id="repo-cours" class="repo-grid"></div>
+  <h3>🎓 Projets avant 2025</h3>
+  <div id="repos-pre" class="repo-grid"></div>
 </section>
 
-<script>
-  const username = "HrexD";
-  const persoContainer = document.getElementById("repo-perso");
-  const coursContainer = document.getElementById("repo-cours");
-
-  fetch(`https://api.github.com/users/${username}/repos`)
-    .then(res => res.json())
-    .then(repos => {
-      repos
-        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-        .forEach(repo => {
-          const year = new Date(repo.created_at).getFullYear();
-          const isCourse = year < 2025;
-
-          const card = document.createElement("div");
-          card.className = "repo-card";
-          card.innerHTML = `
-            <h4><a href="${repo.html_url}" target="_blank">${repo.name}</a></h4>
-            <p>${repo.description || "Aucune description fournie."}</p>
-            <a class="repo-link" href="${repo.html_url}" target="_blank">Voir sur GitHub</a>
-          `;
-
-          (isCourse ? coursContainer : persoContainer).appendChild(card);
-        });
-    });
-</script>
-
-
-
-
 <section>
-  <h2><i class="fas fa-language"></i> Langues</h2>
+  <h2>Soft Skills</h2>
   <ul>
-    <li><i class="fas fa-flag-usa"></i> Anglais : <?= $data["langues"]["anglais"] ?></li>
-    <li><i class="fas fa-flag"></i> Allemand : <?= $data["langues"]["allemand"] ?></li>
+    <?php foreach ($softskills as $s): ?>
+      <li><?= $s['skill'] ?></li>
+    <?php endforeach; ?>
   </ul>
 </section>
 
 <section>
-  <h2><i class="fas fa-heart"></i> Centres d’intérêts</h2>
+  <h2>Centres d'intérêt</h2>
   <ul>
-    <?php foreach ($data["interets"] as $i): ?>
-      <li><?= $i ?></li>
+    <?php foreach ($interets as $i): ?>
+      <li><?= $i['interet'] ?></li>
     <?php endforeach; ?>
   </ul>
 </section>
 
 <script>
   const toggleBtn = document.getElementById("theme-toggle");
-  const body = document.body;
-
-  function updateLabel() {
-    toggleBtn.textContent = body.classList.contains("light-theme") ? "☀️ Mode clair" : "🌙 Mode sombre";
-  }
-
   toggleBtn.addEventListener("click", () => {
-    body.classList.toggle("light-theme");
-    updateLabel();
+    document.body.classList.toggle("light-theme");
+    toggleBtn.textContent = document.body.classList.contains("light-theme") ? "☀️" : "🌙";
   });
 
-  updateLabel();
+  const username = "HrexD";
+  const postContainer = document.getElementById("repos-post");
+  const preContainer = document.getElementById("repos-pre");
+
+  fetch(`https://api.github.com/users/${username}/repos`)
+    .then(res => res.json())
+    .then(repos => {
+      repos
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .forEach(repo => {
+          const year = new Date(repo.created_at).getFullYear();
+          const isPost2025 = year >= 2025;
+
+          const card = document.createElement("div");
+          card.className = "repo-card";
+          card.innerHTML = `
+            <h4><a href="${repo.html_url}" target="_blank">${repo.name}</a></h4>
+            <p>${repo.description || "Aucune description fournie."}</p>
+            <p><strong>Créé en :</strong> ${year}</p>
+          <!--  <a class="repo-link" href="${repo.html_url}" target="_blank">Voir sur GitHub</a> -->
+          `;
+
+          (isPost2025 ? postContainer : preContainer).appendChild(card);
+        });
+    });
 </script>
 
 </body>

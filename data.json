@@ -12,16 +12,42 @@
     "anglais": "B1/B2",
     "allemand": "B1/B2"
   },
-  "competences": [
-    "HTML / CSS",
-    "PHP / Symfony",
-    "MySQL / PostgreSQL",
-    "Javascript / React",
-    "Python, Java",
-    "AMQP (RabbitMQ)",
-    "Git / GitLab / GitHub",
-    "Suite Adobe: Photoshop / Illustrator / InDesign",
-    "Figma"
+  "languages": [
+    "HTML",
+    "CSS",
+    "PHP",
+    "Symfony",
+    "Javascript",
+    "TypeScript",
+    "NodeJS",
+    "ReactJS",
+    "Python",
+    "Java"
+  ],
+  "basesdedonnees": [
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB"
+  ],
+  "applications": [
+    "Git",
+    "GitLab",
+    "GitHub",
+    "Visual Studio Code",
+    "PhpStorm",
+    "Figma",
+    "Photoshop",
+    "Illustrator",
+    "InDesign",
+    "After Effects"
+  ],
+  "softskills": [
+    "Autonome",
+    "Curieux",
+    "Rigoureux",
+    "Esprit d’équipe",
+    "Force de proposition",
+    "Capacité d’adaptation"
   ],
   "interets": [
     "Arts numériques",
