@@ -129,6 +129,28 @@ ul li.subpoint::before {
   font-size: 1rem;
 }
 
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar, .content {
+    width: 100%;
+  }
+}
 
     
 

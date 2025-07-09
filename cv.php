@@ -43,25 +43,16 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
 <body>
 
 <button id="theme-toggle">🌙</button>
-
-<header>
+   <header>
   <h1><?= $user["nom"] ?></h1>
   <p>Développeur Fullstack Junior – PHP/Symfony & JavaScript/React</p>
   <p><?= $user["adresse"] ?> · <?= $user["telephone"] ?> · <a href="mailto:<?= $user["email"] ?>"><?= $user["email"] ?></a></p>
   <p><?= $user["permis"] ?> · <?= $user["age"] ?> ans</p>
   <p><a href="<?= $user["github"] ?>">GitHub</a> · <a href="<?= $user["linkedin"] ?>">LinkedIn</a></p>
 </header>
-
-<section>
-  <h2>Langues</h2>
-  <ul>
-    <?php foreach ($langues as $l): ?>
-      <li><?= ucfirst($l['langue']) ?> : <?= $l['niveau'] ?></li>
-    <?php endforeach; ?>
-  </ul>
-</section>
-
-<section>
+  <div class="main-layout">
+    <div class="sidebar">
+ <section>
   <h2>Compétences techniques</h2>
   <?php
     $grouped = ['langage' => [], 'bdd' => [], 'application' => []];
@@ -79,6 +70,39 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
   <?php endforeach; ?>
 </section>
 
+<section>
+  <h2>Soft Skills</h2>
+  <ul>
+    <?php foreach ($softskills as $s): ?>
+      <li><?= $s['skill'] ?></li>
+    <?php endforeach; ?>
+  </ul>
+</section>
+
+ <section>
+  <h2>Langues</h2>
+  <ul>
+    <?php foreach ($langues as $l): ?>
+      <li><?= ucfirst($l['langue']) ?> : <?= $l['niveau'] ?></li>
+    <?php endforeach; ?>
+  </ul>
+</section>
+
+
+   <section>
+  <h2>Centres d'intérêt</h2>
+  <ul>
+    <?php foreach ($interets as $i): ?>
+      <li><?= $i['interet'] ?></li>
+    <?php endforeach; ?>
+  </ul>
+</section>
+    </div>
+
+    <div class="content">
+
+
+     
 <section>
   <h2>Expériences professionnelles</h2>
   <div class="timeline">
@@ -142,33 +166,11 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
   </div>
 </section>
 
-<section id="github-projects">
-  <h2><i class="fab fa-github"></i> Projets GitHub</h2>
 
-  <h3>🛠️ Projets 2025 et après</h3>
-  <div id="repos-post" class="repo-grid"></div>
 
-  <h3>🎓 Projets avant 2025</h3>
-  <div id="repos-pre" class="repo-grid"></div>
-</section>
-
-<section>
-  <h2>Soft Skills</h2>
-  <ul>
-    <?php foreach ($softskills as $s): ?>
-      <li><?= $s['skill'] ?></li>
-    <?php endforeach; ?>
-  </ul>
-</section>
-
-<section>
-  <h2>Centres d'intérêt</h2>
-  <ul>
-    <?php foreach ($interets as $i): ?>
-      <li><?= $i['interet'] ?></li>
-    <?php endforeach; ?>
-  </ul>
-</section>
+    </div>
+  </div>
+</body>
 
 <script>
 const toggleBtn = document.getElementById("theme-toggle");
@@ -176,32 +178,6 @@ toggleBtn.addEventListener("click", () => {
   document.documentElement.classList.toggle("light-theme");
   toggleBtn.textContent = document.documentElement.classList.contains("light-theme") ? "☀️" : "🌙";
   });
-
-  const username = "HrexD";
-  const postContainer = document.getElementById("repos-post");
-  const preContainer = document.getElementById("repos-pre");
-
-  fetch(`https://api.github.com/users/${username}/repos`)
-    .then(res => res.json())
-    .then(repos => {
-      repos
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .forEach(repo => {
-          const year = new Date(repo.created_at).getFullYear();
-          const isPost2025 = year >= 2025;
-
-          const card = document.createElement("div");
-          card.className = "repo-card";
-          card.innerHTML = `
-            <h4><a href="${repo.html_url}" target="_blank">${repo.name}</a></h4>
-            <p>${repo.description || "Aucune description fournie."}</p>
-            <p><strong>Créé en :</strong> ${year}</p>
-          <!--  <a class="repo-link" href="${repo.html_url}" target="_blank">Voir sur GitHub</a> -->
-          `;
-
-          (isPost2025 ? postContainer : preContainer).appendChild(card);
-        });
-    });
 </script>
 
 </body>
