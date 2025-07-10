@@ -1,19 +1,4 @@
-
 :root, html {
-  --primary: #4e6e81;
-  --secondary: #89b0ae;
-  --background: #0f1115;
-  --surface: #1a1c20;
-  --text: #f1f1f1;
-  --text-muted: #a0a5b0;
-  --accent: #f08a5d;
-  --radius: 10px;
-  --shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  --font: 'Inter', sans-serif;
-  --font-mono: 'Fira Code', monospace;
-}
-
-:root.light-theme, html.light-theme {
   --background: #f0f0f0;
   --surface: #ffffff;
   --text: #222222;
@@ -21,7 +6,30 @@
   --primary: #4e6e81;
   --secondary: #89b0ae;
   --accent: #f08a5d;
+    --accent-active: #89a4b0;
+    --radius: 10px;
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  --font: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
 }
+
+:root.dark-theme, html.dark-theme {
+  --primary: #4e6e81;
+  --secondary: #89b0ae;
+  --background: #0f1115;
+  --surface: #1a1c20;
+  --text: #f1f1f1;
+  --text-muted: #a0a5b0;
+  --accent: #f08a5d;
+  --accent-active: #89a4b0;
+
+}
+
+#active {
+  color: var(--accent-active);
+  font-weight: bold;
+}
+
 
 body {
   background-color: var(--background) !important;
@@ -217,7 +225,7 @@ ul li.subpoint::before {
   transition: transform 0.2s ease;
 
   width: 250px;
-  height: 150px;
+  height: 180px;
 
   overflow: hidden;
   display: flex;
@@ -252,19 +260,76 @@ ul li.subpoint::before {
   text-decoration: underline;
 }
 
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.lang-badge {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
 nav {
-  margin-bottom: 2rem;
-  font-weight: 600;
+  display: flex;
+  justify-content: flex-end; 
+  gap: 1rem; 
+  padding: 1rem;
 }
 
 nav a {
   color: var(--accent);
   text-decoration: none;
-  margin-right: 1rem;
+  font-weight: 600;
 }
 
 nav a:hover {
   text-decoration: underline;
+}
+
+footer {
+  background-color: var(--surface);
+  color: var(--text-muted);
+  padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-content span {
+  display: flex;
+  align-items: center;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  margin: 0 0.25rem;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer .heart {
+  color: var(--accent);
+  margin: 0 0.25rem;
 }
 
 
@@ -281,3 +346,72 @@ nav a:hover {
         font-size: 1.2rem;
       }
     }
+
+
+    /* Styles spécifiques pour index.php */
+.index-biography {
+    background: linear-gradient(135deg, var(--surface), var(--background));
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.index-biography::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(78, 110, 129, 0.2), rgba(137, 176, 174, 0.2));
+    z-index: -1;
+}
+
+.index-biography img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    float: left;
+    margin-right: 20px;
+    shape-outside: circle(75px at 50% 50%);
+}
+
+.index-interests, .index-contact {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.index-interests::before, .index-contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(240, 138, 93, 0.1), rgba(137, 164, 176, 0.1));
+    z-index: -1;
+}
+
+/* Style pour les liens dans les sections */
+.index-contact a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.index-contact a:hover {
+    text-decoration: underline;
+}

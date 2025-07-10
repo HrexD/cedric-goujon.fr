@@ -1,71 +1,49 @@
+<?php
+require 'config.php';
+$user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Accueil - Mon site perso</title>
-  <link rel="stylesheet" href="style.css" />
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil – Cédric Goujon</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body><button id="theme-toggle">🌙</button>
-
-
-<header>
-  <h1>Bienvenue sur mon site personnel</h1>
-  <p>Découvrez mon univers et mon parcours professionnel.</p>
-</header>
-
-<nav>
-  <a href="index.php">Accueil</a> |
-  <a href="cv.php">Mon CV</a>
-</nav>
-
-<section>
-  <h2>À propos</h2>
-  <p>Voici la page d'accueil de mon site personnel./p>
-</section>
-<section id="github-projects">
-  <h2><i class="fab fa-github"></i> Projets GitHub</h2>
-
-  <h3>🛠️ Projets 2025 et après</h3>
-  <div id="repos-post" class="repo-grid"></div>
-
-  <h3>🎓 Projets avant 2025</h3>
-  <div id="repos-pre" class="repo-grid"></div>
-</section>
-
+<body>
+  <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
+  <nav aria-label="Navigation principale">
+    <a href="index.php" id="active">Accueil</a>
+    <a href="cv.php">Mon CV</a>
+    <a href="projets.php">Mes Projets</a>
+  </nav>
+  <header>
+    <h1>Bonjour, je suis <strong>Cédric Goujon</strong></h1>
+    <p>Développeur Full‑Stack basé à Paris, diplômé de H3 Hitema.</p>
+    <p>Actuellement en poste chez Free, je recherche de nouvelles opportunités en développement web.</p>
+  </header>
+  <main>
+    <section class="about">
+      <h2>Ce que j’ai</h2>
+      <ul>
+        <li>📘 Diplômé H3 Hitema</li>
+        <li>🛠️ Expérience chez Free (opérateur télécom)</li>
+        <li>💻 Compétences : HTML, CSS, JavaScript, PHP, SQL, frameworks front/back</li>
+      </ul>
+    </section>
+    <section class="looking">
+      <h2>Ce que je cherche</h2>
+      <p>Je souhaite rejoindre une équipe innovante en tant que <strong>développeur Full‑Stack</strong>, idéalement sur des projets web modernes, en présentiel ou télétravail depuis Paris.</p>
+    </section>
+    <section class="contact">
+      <h2>Contact</h2>
+      <p>Email : <a href="mailto:<?= htmlspecialchars($user['email']) ?>"><?= htmlspecialchars($user['email']) ?></a></p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; <?= date('Y') ?> Cédric Goujon. Tous droits réservés.</p>
+  </footer>
+  <script src="script.js"></script>
 </body>
-<script>
- const toggleBtn = document.getElementById("theme-toggle");
-toggleBtn.addEventListener("click", () => {
-  document.documentElement.classList.toggle("light-theme");
-  toggleBtn.textContent = document.documentElement.classList.contains("light-theme") ? "☀️" : "🌙";
-  });
-  
-  const username = "HrexD";
-  const postContainer = document.getElementById("repos-post");
-  const preContainer = document.getElementById("repos-pre");
-
-  fetch(`https://api.github.com/users/${username}/repos`)
-    .then(res => res.json())
-    .then(repos => {
-      repos
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .forEach(repo => {
-          const year = new Date(repo.created_at).getFullYear();
-          const isPost2025 = year >= 2025;
-
-          const card = document.createElement("div");
-          card.className = "repo-card";
-          card.innerHTML = `
-            <h4><a href="${repo.html_url}" target="_blank">${repo.name}</a></h4>
-            <p>${repo.description || "Aucune description fournie."}</p>
-            <p><strong>Créé en :</strong> ${year}</p>
-          <!--  <a class="repo-link" href="${repo.html_url}" target="_blank">Voir sur GitHub</a> -->
-          `;
-
-          (isPost2025 ? postContainer : preContainer).appendChild(card);
-        });
-    });
-</script>
 </html>

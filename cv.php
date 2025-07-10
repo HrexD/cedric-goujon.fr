@@ -35,13 +35,15 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
   <title>CV de <?= $user["nom"] ?></title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <nav>
-    <a href="index.php">Accueil</a>
-    <a href="cv.php">Mon CV</a>
-</nav>
+   <link rel="icon" type="image/png" href="favicon.png">
+
 </head>
 <body>
-
+  <nav>
+    <a href="index">Accueil</a> |
+    <a id="active" href="cv">Mon CV</a> |
+    <a href="projets">Mes Projets</a>
+</nav>
 <button id="theme-toggle">🌙</button>
    <header>
   <h1><?= $user["nom"] ?></h1>
@@ -172,13 +174,17 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
   </div>
 </body>
 
-<script>
-const toggleBtn = document.getElementById("theme-toggle");
-toggleBtn.addEventListener("click", () => {
-  document.documentElement.classList.toggle("light-theme");
-  toggleBtn.textContent = document.documentElement.classList.contains("light-theme") ? "☀️" : "🌙";
-  });
-</script>
+    <script src="script.js"></script>
 
+<footer>
+  <div class="footer-content">
+    <span>© <script>document.write(new Date().getFullYear())</script> Cédric Goujon. Tous droits réservés.</span>
+    <span>Contact: <a href="mailto:<?= $user["email"] ?>">email</a></span>
+    <span>Suivez-nous sur <a href="<?= $user["github"]?>">GitHub</a> et <a href="<?= $user["linkedin"]?>">LinkedIn</a></span>
+    <span>Créé avec passion par <?= $user["nom"] ?></span>
+    <span>Version: 1.0.0</span>
+    <span>Dernière mise à jour: <script>document.write(new Date().toLocaleDateString('fr-FR'))</script></span>
+  </div>
+</footer>
 </body>
 </html>
