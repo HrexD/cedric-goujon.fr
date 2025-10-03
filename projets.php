@@ -1,5 +1,6 @@
 <?php
 require'config.php';
+require 'auth_helper.php';
 $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
 $userid = $user['id'];
 ?>
@@ -19,11 +20,7 @@ $userid = $user['id'];
 </head>
 
 <body>
-      <nav>
-    <a href="index">Accueil</a> |
-    <a href="cv"> Mon CV</a> |
-    <a id="active" href="projets"> Mes Projets</a>
-</nav>
+  <?= generateNavigation('projets') ?>
   <button id="theme-toggle">☀️</button>
 
   <header>

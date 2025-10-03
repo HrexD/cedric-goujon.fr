@@ -1,5 +1,8 @@
 <?php
+
 require 'config.php';
+require 'auth_helper.php';
+
 $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
 ?>
 <!DOCTYPE html>
@@ -16,11 +19,7 @@ $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
   <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
 
   <!-- Navigation -->
-  <nav>
-    <a id="active" href="index">Accueil</a> |
-    <a  href="cv">Mon CV</a> |
-    <a href="projets">Mes Projets</a>
-</nav>
+  <?= generateNavigation('index') ?>
 
   <!-- Hero section -->
   <header id="hero">

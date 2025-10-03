@@ -1,28 +1,53 @@
 <?php
 require 'config.php';
+require 'auth_helper.php';
+
+// Récupérer les données de l'utilisateur
+$user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
 
 $success = '';
 $error = '';
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nom = htmlspecialchars(trim($_POST['nom']));
-    $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
-    $message = htmlspecialchars(trim($_POST['message']));
+    $nom = sanitize_input($_POST['nom'] ?? '');
+    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
+    $sujet = sanitize_input($_POST['sujet'] ?? '');
+    $message = sanitize_input($_POST['message'] ?? '');
 
-    if (!$nom || !$email || !$message) {
+    // Validation
+    if (empty($nom) || !$email || empty($sujet) || empty($message)) {
         $error = "Merci de remplir tous les champs correctement.";
     } else {
-        // Destinataire
-        $to = $user['email'];
-        $subject = "Message depuis le formulaire de contact de votre site";
-        $body = "Nom: $nom\nEmail: $email\n\nMessage:\n$message";
-        $headers = "From: $email";
-
-        if (mail($to, $subject, $body, $headers)) {
-            $success = "Merci ! Votre message a été envoyé.";
-        } else {
-            $error = "Une erreur est survenue. Veuillez réessayer plus tard.";
+        try {
+            // Insérer le message en base de données (recommandé plutôt que mail())
+            $stmt = $pdo->prepare("INSERT INTO messages_contact (nom, email, sujet, message, date_envoi) VALUES (?, ?, ?, ?, NOW())");
+            
+            if ($stmt->execute([$nom, $email, $sujet, $message])) {
+                $success = "Merci ! Votre message a été envoyé avec succès.";
+                // Optionnel : tentative d'envoi d'email en plus
+                $to = $user['email'] ?? 'cedric.adam.goujon@gmail.com';
+                $subject = "Contact site web: " . $sujet;
+                $body = "Nom: $nom\nEmail: $email\nSujet: $sujet\n\nMessage:\n$message";
+                $headers = "From: no-reply@cedric-goujon.fr\r\nReply-To: $email\r\n";
+                
+                // Tentative d'envoi email (peut échouer selon la config serveur)
+                @mail($to, $subject, $body, $headers);
+            } else {
+                $error = "Erreur lors de l'envoi du message. Veuillez réessayer.";
+            }
+        } catch (PDOException $e) {
+            // Si la table n'existe pas, fallback vers email seulement
+            $to = $user['email'] ?? 'cedric.adam.goujon@gmail.com';
+            $subject = "Contact site web: " . $sujet;
+            $body = "Nom: $nom\nEmail: $email\nSujet: $sujet\n\nMessage:\n$message";
+            $headers = "From: no-reply@cedric-goujon.fr\r\nReply-To: $email\r\n";
+            
+            if (@mail($to, $subject, $body, $headers)) {
+                $success = "Merci ! Votre message a été envoyé.";
+            } else {
+                $error = "Une erreur est survenue. Contactez-moi directement par email.";
+            }
         }
     }
 }
@@ -34,17 +59,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact – Cédric Goujon</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body>
+  <!-- Bouton thème -->
+  <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
+
   <!-- Navigation -->
-  <nav>
-    <a href="index">Accueil</a>
-    <a href="cv">Mon CV</a>
-    <a href="projets">Mes Projets</a>
-    <a href="contact" id="active">Contact</a>
-  </nav>
+  <?= generateNavigation('contact') ?>
 
   <main>
+    <!-- Messages de feedback -->
+    <?php if ($success): ?>
+      <div class="alert alert-success">
+        <strong>✅ Succès !</strong> <?= htmlspecialchars($success) ?>
+      </div>
+    <?php endif; ?>
+    
+    <?php if ($error): ?>
+      <div class="alert alert-error">
+        <strong>❌ Erreur :</strong> <?= htmlspecialchars($error) ?>
+      </div>
+    <?php endif; ?>
+
 <section class="contact-section">
   <div class="contact-container">
     <!-- Colonne gauche : texte et coordonnées -->
@@ -58,12 +95,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Colonne droite : formulaire -->
     <div class="contact-form-container">
-      <form action="contact.php" method="POST" class="contact-form">
-        <input type="text" name="nom" placeholder="Nom" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="sujet" placeholder="Sujet" required>
-        <textarea name="message" rows="6" placeholder="Votre message" required></textarea>
-        <button type="submit" class="cta">Envoyer</button>
+      <form action="contact" method="POST" class="contact-form">
+        <input type="text" name="nom" placeholder="Votre nom" value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>" required>
+        <input type="email" name="email" placeholder="Votre email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
+        <input type="text" name="sujet" placeholder="Sujet de votre message" value="<?= htmlspecialchars($_POST['sujet'] ?? '') ?>" required>
+        <textarea name="message" rows="6" placeholder="Votre message" required><?= htmlspecialchars($_POST['message'] ?? '') ?></textarea>
+        <button type="submit" class="cta">Envoyer le message</button>
       </form>
     </div>
   </div>
@@ -77,5 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <span>© <script>document.write(new Date().getFullYear())</script> Cédric Goujon. Tous droits réservés.</span>
     </div>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

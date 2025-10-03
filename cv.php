@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+require 'auth_helper.php';
 
 $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
 $userid = $user['id'];
@@ -39,11 +40,7 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
 
 </head>
 <body>
-  <nav>
-    <a href="index">Accueil</a> |
-    <a id="active" href="cv">Mon CV</a> |
-    <a href="projets">Mes Projets</a>
-</nav>
+  <?= generateNavigation('cv') ?>
 <button id="theme-toggle">🌙</button>
    <header>
   <h1><?= $user["nom"] ?></h1>

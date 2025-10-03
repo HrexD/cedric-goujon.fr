@@ -16,7 +16,8 @@ Ce dépôt contient le code source de mon site personnel [cedric-goujon.fr](http
 - 🏠 **Page d'accueil** - Présentation personnelle et professionnelle
 - 📄 **CV interactif** - Parcours, compétences et expériences
 - 🚀 **Portfolio de projets** - Vitrine de mes réalisations
-- 📧 **Formulaire de contact** - Communication directe
+- 📧 **Formulaire de contact** - Communication directe avec sauvegarde en base
+- 🔧 **Interface d'administration** - Gestion des messages reçus
 - 🌓 **Mode sombre/clair** - Basculement de thème
 - 📱 **Design responsive** - Compatible tous appareils
 - 🔍 **Exercice GitHub** - Recherche d'utilisateurs GitHub (démo API)
