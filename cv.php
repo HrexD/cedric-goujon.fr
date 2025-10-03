@@ -179,11 +179,8 @@ $technos = $pdo->query("SELECT nom, type FROM technologies WHERE utilisateur_id 
 <footer>
   <div class="footer-content">
     <span>© <script>document.write(new Date().getFullYear())</script> Cédric Goujon. Tous droits réservés.</span>
-    <span>Contact: <a href="mailto:<?= $user["email"] ?>">email</a></span>
-    <span>Suivez-nous sur <a href="<?= $user["github"]?>">GitHub</a> et <a href="<?= $user["linkedin"]?>">LinkedIn</a></span>
-    <span>Créé avec passion par <?= $user["nom"] ?></span>
-    <span>Version: 1.0.0</span>
-    <span>Dernière mise à jour: <script>document.write(new Date().toLocaleDateString('fr-FR'))</script></span>
+    <span>Contact: <a href="mailto:<?= $user["email_contact"] ?>">contact</a></span>
+    <span>Suivez-moi sur <a href="<?= $user["github"]?>">GitHub</a> et <a href="<?= $user["linkedin"]?>">LinkedIn</a></span>
   </div>
 </footer>
 </body>
