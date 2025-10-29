@@ -29,7 +29,10 @@
     #photoGalleryBtn, #videoGalleryBtn{background:#28a745;color:white;border-color:#1e7e34;}
     @media (max-width: 768px) {
       #mobileButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0;}
-      #mobileButtons button{margin:0;padding:12px 8px;font-size:0.95em;width:100%;}
+      #mobileButtons button{margin:0;padding:12px 8px;font-size:0.95em;width:100%;position:relative;overflow:hidden;}
+      #mobileButtons button:active{transform:scale(0.95);transition:transform 0.15s ease;}
+      #mobileButtons button::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,0.3);transition:width 0.3s ease, height 0.3s ease;transform:translate(-50%,-50%);}
+      #mobileButtons button:active::after{width:100px;height:100px;}
       .dropzone{padding:16px;font-size:1.1em;}
       body{margin:12px;}
     }
@@ -44,9 +47,9 @@
       <button id="selectBtn">Sélectionner des fichiers</button>
     </div>
     <div id="mobileButtons" style="display:none;">
-      <!-- <button id="photoBtn">📷 Prendre une Photo</button> -->
+      <button id="photoBtn">📷 Prendre Photo</button>
       <button id="photoGalleryBtn">🖼️ Choisir Photo</button>
-      <!-- <button id="videoBtn">🎥 Prendre une Vidéo</button> -->
+      <button id="videoBtn">🎥 Prendre Vidéo</button>
       <button id="videoGalleryBtn">📁 Choisir Vidéo</button>
     </div>
     <input id="fileInput" type="file" multiple accept="image/*,video/*" style="display:none">
@@ -91,10 +94,48 @@
     // Limite de taille : 512 Mo
     const MAX_FILE_SIZE = 512 * 1024 * 1024; // 512 Mo en bytes
 
-    // Détection mobile
+    // Sauvegarde et restauration d'état
+    function saveUploadState() {
+      const state = items.map(item => ({
+        id: item.id,
+        name: item.file.name,
+        size: item.file.size,
+        readyPct: item.readyPct,
+        uploadPct: item.uploadPct,
+        completed: item.uploadPct >= 100
+      }));
+      localStorage.setItem('uploadState', JSON.stringify(state));
+    }
+
+    function restoreUploadState() {
+      const saved = localStorage.getItem('uploadState');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          state.forEach(itemState => {
+            if (!itemState.completed) {
+              // Afficher dans l'interface que des uploads étaient en cours
+              showNotification(`Upload en cours restauré: ${itemState.name} (${itemState.uploadPct}%)`);
+            }
+          });
+        } catch (e) {
+          console.error('Erreur restauration état:', e);
+        }
+      }
+    }
+
+    function showNotification(message, type = 'info') {
+      // Version simplifiée : utiliser les erreurs existantes
+      if (type === 'error') {
+        showError(message);
+      } else {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+      }
+    }
+
+    // Détection mobile (simplifiée)
     function isMobileDevice() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-             window.innerWidth <= 768;
+      return window.innerWidth <= 768;
     }
 
     // Initialisation de l'interface selon le device
@@ -185,9 +226,52 @@
         }
         
         const id = Math.random().toString(36).slice(2,9);
-        const item = {file: f, id, readyPct:0, uploadPct:0, xhr:null, startTime:null, uploadSpeed:0};
+        const item = {file: f, id, readyPct:0, uploadPct:0, xhr:null, startTime:null, uploadSpeed:0, originalFile: f};
         items.push(item);
         renderItem(item);
+        
+        // Compresser les images si nécessaires (version simplifiée)
+        if (f.type.startsWith('image/') && f.size > 5 * 1024 * 1024) { // > 5MB seulement
+          compressImageSimple(item);
+        } else {
+          readFileProgress(item);
+        }
+      }
+    }
+
+    async function compressImageSimple(item) {
+      try {
+        // Version simplifiée : juste compresser sans redimensionner
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          
+          // Compression simple avec qualité réduite
+          canvas.toBlob(blob => {
+            if (blob && blob.size < item.originalFile.size * 0.8) { // Seulement si réduction > 20%
+              const compressedFile = new File([blob], item.originalFile.name, {
+                type: 'image/jpeg',
+                lastModified: item.originalFile.lastModified
+              });
+              item.file = compressedFile;
+            }
+            readFileProgress(item);
+          }, 'image/jpeg', 0.8);
+        };
+        
+        img.onerror = () => {
+          // En cas d'erreur, utiliser le fichier original
+          readFileProgress(item);
+        };
+        
+        img.src = URL.createObjectURL(item.originalFile);
+      } catch (err) {
+        // En cas d'erreur, utiliser le fichier original
         readFileProgress(item);
       }
     }
@@ -266,6 +350,9 @@
       const p = el.querySelector('.progress');
       p.style.width = item.uploadPct + '%';
 
+      // Sauvegarder l'état
+      saveUploadState();
+
       // Afficher les statistiques d'upload
       const statsEl = el.querySelector('.upload-stats');
       if(statsEl && item.uploadSpeed && item.uploadPct > 0 && item.uploadPct < 100) {
@@ -283,6 +370,9 @@
         if (readiness) readiness.style.display = 'none';
         if (progressBar) progressBar.style.display = 'none';
         if (uploadStats) uploadStats.style.display = 'none';
+
+        // Notification de succès
+        showNotification(`✓ Upload terminé: ${item.file.name}`, 'success');
 
         // show confirmation badge if not already present
         if (!el.querySelector('.upload-confirm')) {

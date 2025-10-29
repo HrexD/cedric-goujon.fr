@@ -85,6 +85,22 @@ function formatFileSize($bytes) {
 
     /* bouton alternatif (non utilisé) kept for compatibility */
     .btn-red{background:#dc3545;color:white;padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+    
+    /* Filtres */
+    .filters{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+    .filter-group{display:flex;gap:8px;align-items:center}
+    .filter-select{padding:8px 12px;border:1px solid #ddd;border-radius:6px;background:white}
+    .search-input{padding:8px 12px;border:1px solid #ddd;border-radius:6px;min-width:200px}
+    .filter-btn{padding:8px 16px;border:1px solid #007bff;background:white;color:#007bff;border-radius:6px;cursor:pointer;transition:all 0.2s}
+    .filter-btn.active{background:#007bff;color:white}
+    .clear-filters{background:#6c757d;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+    
+    /* Sélection multiple */
+    .selection-controls{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:white;padding:12px 20px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);border:1px solid #ddd;z-index:1000}
+    .selection-counter{font-weight:600;color:#007bff;margin-right:12px}
+    .bulk-actions{display:flex;gap:8px}
+    .card.selected{border-color:#007bff;box-shadow:0 0 0 2px rgba(0,123,255,0.25)}
+    .card-checkbox{position:absolute;top:8px;left:8px;width:20px;height:20px;cursor:pointer}
   </style>
 </head>
 <body class="admin-page">
@@ -147,6 +163,38 @@ function formatFileSize($bytes) {
         </div>
       <?php endif; ?>
 
+      <!-- Filtres et contrôles -->
+      <div class="filters">
+        <div class="filter-group">
+          <label>🔍 Rechercher :</label>
+          <input type="text" id="searchInput" class="search-input" placeholder="Nom de fichier...">
+        </div>
+        <div class="filter-group">
+          <label>Type :</label>
+          <select id="typeFilter" class="filter-select">
+            <option value="all">Tous les fichiers</option>
+            <option value="image">📷 Images</option>
+            <option value="video">🎥 Vidéos</option>
+            <option value="other">📄 Autres</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Taille :</label>
+          <select id="sizeFilter" class="filter-select">
+            <option value="all">Toutes tailles</option>
+            <option value="small">< 1 MB</option>
+            <option value="medium">1-10 MB</option>
+            <option value="large">10-100 MB</option>
+            <option value="xlarge">> 100 MB</option>
+          </select>
+        </div>
+        <button id="clearFilters" class="clear-filters">Effacer filtres</button>
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <button id="selectAllBtn" class="filter-btn">Tout sélectionner</button>
+          <button id="deselectAllBtn" class="filter-btn">Tout désélectionner</button>
+        </div>
+      </div>
+
       <section>
         <?php if (empty($files)): ?>
           <div style="padding:2rem;color:var(--text-muted);">Aucun fichier dans le dossier <code>uploads/</code>.</div>
@@ -158,7 +206,11 @@ function formatFileSize($bytes) {
               $isImg = @isImage($full);
               $isVid = @isVideo($full);
             ?>
-            <div class="card" data-filename="<?= htmlspecialchars($f) ?>">
+            <div class="card" data-filename="<?= htmlspecialchars($f) ?>" 
+                 data-type="<?= $isImg ? 'image' : ($isVid ? 'video' : 'other') ?>"
+                 data-size="<?= filesize($full) ?>"
+                 data-date="<?= filemtime($full) ?>">
+              <input type="checkbox" class="card-checkbox" data-filename="<?= htmlspecialchars($f) ?>">
               <?php if ($isImg): ?>
                 <img src="<?= $url ?>" class="thumb" alt="<?= htmlspecialchars($f) ?>">
               <?php elseif ($isVid): ?>
@@ -171,7 +223,7 @@ function formatFileSize($bytes) {
               <div class="meta">
                 <div style="flex:1">
                   <div class="file-name" title="<?= htmlspecialchars($f) ?>"><?= htmlspecialchars($f) ?></div>
-                  <div style="font-size:0.8em;color:var(--text-muted);"><?= round(filesize($full)/1024,2) ?> KB • <?= date('d/m H:i', filemtime($full)) ?></div>
+                  <div style="font-size:0.8em;color:var(--text-muted);"><?= formatFileSize(filesize($full)) ?> • <?= date('d/m H:i', filemtime($full)) ?></div>
                 </div>
               </div>
             </div>
@@ -182,24 +234,175 @@ function formatFileSize($bytes) {
     </main>
   </div>
 
+  <!-- Contrôles de sélection multiple -->
+  <div id="selectionControls" class="selection-controls">
+    <span class="selection-counter">0 fichier(s) sélectionné(s)</span>
+    <div class="bulk-actions">
+      <button onclick="bulkDelete()" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">🗑️ Supprimer sélection</button>
+      <button onclick="clearSelection()" style="background:#6c757d;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer">Annuler</button>
+    </div>
+  </div>
+
   <script>
-    document.addEventListener('click', async (e)=>{
+    let selectedFiles = new Set();
+
+    // Filtres
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('typeFilter');
+    const sizeFilter = document.getElementById('sizeFilter');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const selectAllBtn = document.getElementById('selectAllBtn');
+    const deselectAllBtn = document.getElementById('deselectAllBtn');
+
+    function filterCards() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const typeValue = typeFilter.value;
+      const sizeValue = sizeFilter.value;
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const filename = card.dataset.filename.toLowerCase();
+        const type = card.dataset.type;
+        const size = parseInt(card.dataset.size);
+
+        // Filtre recherche
+        const matchesSearch = filename.includes(searchTerm);
+
+        // Filtre type
+        const matchesType = typeValue === 'all' || type === typeValue;
+
+        // Filtre taille
+        let matchesSize = true;
+        if (sizeValue === 'small') matchesSize = size < 1024 * 1024;
+        else if (sizeValue === 'medium') matchesSize = size >= 1024 * 1024 && size < 10 * 1024 * 1024;
+        else if (sizeValue === 'large') matchesSize = size >= 10 * 1024 * 1024 && size < 100 * 1024 * 1024;
+        else if (sizeValue === 'xlarge') matchesSize = size >= 100 * 1024 * 1024;
+
+        card.style.display = (matchesSearch && matchesType && matchesSize) ? 'block' : 'none';
+      });
+    }
+
+    // Event listeners pour les filtres (simplifiés avec debounce)
+    let filterTimeout;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(filterTimeout);
+      filterTimeout = setTimeout(filterCards, 300); // Délai pour éviter les appels excessifs
+    });
+    typeFilter.addEventListener('change', filterCards);
+    sizeFilter.addEventListener('change', filterCards);
+    clearFiltersBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      typeFilter.value = 'all';
+      sizeFilter.value = 'all';
+      filterCards();
+    });
+
+    // Sélection multiple
+    function updateSelectionUI() {
+      const selectionControls = document.getElementById('selectionControls');
+      const counter = selectionControls.querySelector('.selection-counter');
+      const count = selectedFiles.size;
+      
+      counter.textContent = `${count} fichier(s) sélectionné(s)`;
+      selectionControls.style.display = count > 0 ? 'block' : 'none';
+    }
+
+    function toggleCardSelection(filename) {
+      const card = document.querySelector(`[data-filename="${CSS.escape(filename)}"]`);
+      if (selectedFiles.has(filename)) {
+        selectedFiles.delete(filename);
+        card.classList.remove('selected');
+        card.querySelector('.card-checkbox').checked = false;
+      } else {
+        selectedFiles.add(filename);
+        card.classList.add('selected');
+        card.querySelector('.card-checkbox').checked = true;
+      }
+      updateSelectionUI();
+    }
+
+    function selectAll() {
+      const visibleCards = document.querySelectorAll('.card[style*="block"], .card:not([style*="none"])');
+      visibleCards.forEach(card => {
+        if (card.style.display !== 'none') {
+          const filename = card.dataset.filename;
+          selectedFiles.add(filename);
+          card.classList.add('selected');
+          card.querySelector('.card-checkbox').checked = true;
+        }
+      });
+      updateSelectionUI();
+    }
+
+    function clearSelection() {
+      selectedFiles.clear();
+      document.querySelectorAll('.card').forEach(card => {
+        card.classList.remove('selected');
+        card.querySelector('.card-checkbox').checked = false;
+      });
+      updateSelectionUI();
+    }
+
+    async function bulkDelete() {
+      if (selectedFiles.size === 0) return;
+      
+      if (!confirm(`Supprimer ${selectedFiles.size} fichier(s) sélectionné(s) ?`)) return;
+
+      const promises = Array.from(selectedFiles).map(async filename => {
+        const form = new FormData();
+        form.append('file', filename);
+        const res = await fetch('admin_delete_upload.php', {method: 'POST', body: form});
+        const data = await res.json();
+        if (data.success) {
+          const card = document.querySelector(`[data-filename="${CSS.escape(filename)}"]`);
+          if (card) card.remove();
+          selectedFiles.delete(filename);
+        }
+        return data;
+      });
+
+      try {
+        await Promise.all(promises);
+        updateSelectionUI();
+      } catch (err) {
+        alert('Erreur lors de la suppression groupée');
+      }
+    }
+
+    selectAllBtn.addEventListener('click', selectAll);
+    deselectAllBtn.addEventListener('click', clearSelection);
+
+    // Event listeners pour checkboxes et suppression individuelle
+    document.addEventListener('click', async (e) => {
+      // Checkbox selection
+      if (e.target.classList.contains('card-checkbox')) {
+        e.stopPropagation();
+        const filename = e.target.dataset.filename;
+        toggleCardSelection(filename);
+        return;
+      }
+
+      // Suppression individuelle
       const btn = e.target.closest('button[data-action="delete"]');
-      if(!btn) return;
+      if (!btn) return;
+      
       const card = btn.closest('.card');
       const filename = card.getAttribute('data-filename');
-      if (!confirm('Supprimer "'+filename+'" ?')) return;
+      if (!confirm('Supprimer "' + filename + '" ?')) return;
 
-      try{
-        const form = new FormData(); form.append('file', filename);
-        const res = await fetch('admin_delete_upload.php', {method:'POST', body: form});
+      try {
+        const form = new FormData();
+        form.append('file', filename);
+        const res = await fetch('admin_delete_upload.php', {method: 'POST', body: form});
         const data = await res.json();
-        if(data.success){
+        if (data.success) {
           card.remove();
+          selectedFiles.delete(filename);
+          updateSelectionUI();
         } else {
-          alert('Erreur: '+(data.error||'Erreur inconnue'));
+          alert('Erreur: ' + (data.error || 'Erreur inconnue'));
         }
-      } catch(err){
+      } catch (err) {
         alert('Erreur réseau');
       }
     });
