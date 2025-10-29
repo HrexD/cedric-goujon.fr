@@ -1,8 +1,8 @@
 <?php
-// Redirection vers le nouveau système
-header('Location: index.php');
-exit();
-?>
+require_once '../config.php';
+
+$stmt = $pdo->query("SELECT * FROM candidatures ORDER BY date_candidature DESC");
+$candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>

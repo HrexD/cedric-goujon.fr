@@ -73,18 +73,26 @@ try {
     $system_info['database'] = ['error' => $e->getMessage()];
 }
 
-// Informations disque
+// Informations disque (avec garde contre disk_total_space() retournant false ou 0)
 if (function_exists('disk_free_space') && function_exists('disk_total_space')) {
-    $total = disk_total_space('.');
-    $free = disk_free_space('.');
-    $used = $total - $free;
-    
-    $system_info['disk'] = [
-        'total' => round($total / 1024 / 1024 / 1024, 2),
-        'used' => round($used / 1024 / 1024 / 1024, 2),
-        'free' => round($free / 1024 / 1024 / 1024, 2),
-        'usage_percent' => round(($used / $total) * 100, 1)
-    ];
+    $total = @disk_total_space('.');
+    $free = @disk_free_space('.');
+
+    // Vérifier que nous avons bien des valeurs numériques valides
+    if ($total === false || $free === false || $total <= 0) {
+        // Ne pas remplir les infos disque si on ne peut pas les obtenir
+        $system_info['disk'] = [];
+    } else {
+        $used = max(0, $total - $free);
+        $usagePercent = $total > 0 ? round(($used / $total) * 100, 1) : 0;
+
+        $system_info['disk'] = [
+            'total' => round($total / 1024 / 1024 / 1024, 2),
+            'used' => round($used / 1024 / 1024 / 1024, 2),
+            'free' => round($free / 1024 / 1024 / 1024, 2),
+            'usage_percent' => $usagePercent
+        ];
+    }
 }
 
 // Statistiques des tables

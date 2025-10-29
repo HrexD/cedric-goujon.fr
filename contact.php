@@ -26,13 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute([$nom, $email, $sujet, $message])) {
                 $success = "Merci ! Votre message a été envoyé avec succès.";
                 // Optionnel : tentative d'envoi d'email en plus
-                $to = $user['email'] ?? 'cedric.adam.goujon@gmail.com';
+                $to = $user['email'] ?? 'contact@cedric-goujon.fr';
                 $subject = "Contact site web: " . $sujet;
                 $body = "Nom: $nom\nEmail: $email\nSujet: $sujet\n\nMessage:\n$message";
                 $headers = "From: no-reply@cedric-goujon.fr\r\nReply-To: $email\r\n";
                 
                 // Tentative d'envoi email (peut échouer selon la config serveur)
                 @mail($to, $subject, $body, $headers);
+                
+                // Vider les champs après succès
+                $_POST = [];
             } else {
                 $error = "Erreur lors de l'envoi du message. Veuillez réessayer.";
             }
@@ -45,6 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if (@mail($to, $subject, $body, $headers)) {
                 $success = "Merci ! Votre message a été envoyé.";
+                // Vider les champs après succès
+                $_POST = [];
             } else {
                 $error = "Une erreur est survenue. Contactez-moi directement par email.";
             }

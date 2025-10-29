@@ -164,6 +164,7 @@ $system_info = [
                     <li><a href="admin_messages"><span class="icon">📧</span> Messages</a></li>
                     <li><a href="admin_candidatures"><span class="icon">💼</span> Candidatures</a></li>
                     <li><a href="admin_projets"><span class="icon">🚀</span> Projets</a></li>
+                    <li><a href="admin_gallery"><span class="icon">🖼️</span> Galerie</a></li>
                     <li><a href="admin_utilisateur"><span class="icon">👤</span> Profil</a></li>
                     <li><a href="admin_systeme"><span class="icon">⚙️</span> Système</a></li>
                     <li style="margin-top: 2rem; border-top: 1px solid var(--background); padding-top: 1rem;">

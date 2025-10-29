@@ -46,6 +46,15 @@ Ce dépôt contient le code source de mon site personnel [cedric-goujon.fr](http
 - **Fonctions d'authentification** : `auth_helper.php` pour la gestion centralisée
 - **Documentation complète** : Guides de migration et d'utilisation
 
+#### 🖼️ **Système d'Upload et Galerie**
+
+- **Interface d'upload moderne** : Drag & drop avec prévisualisation temps réel
+- **Upload séquentiel optimisé** : Traitement un par un pour maximiser la bande passante
+- **Support multi-formats** : Images et vidéos avec validation automatique
+- **Galerie d'administration** : Visualisation en grille et suppression sécurisée
+- **Logging complet** : Traçabilité des uploads avec horodatage et métadonnées
+- **Gestion des erreurs** : Reprise automatique et messages d'état détaillés
+
 ## 🛠️ Technologies utilisées
 
 ### Frontend
@@ -64,30 +73,35 @@ Ce dépôt contient le code source de mon site personnel [cedric-goujon.fr](http
 
 ## 📁 Structure du projet
 
-```
-├── 📄 index.php          # Page d'accueil
-├── 📄 cv.php             # Page CV
-├── 📄 projets.php        # Page projets
-├── 📄 contact.php        # Page contact
-├── 📄 admin.php          # Interface d'administration
-├── 📄 exercice.html      # Démo recherche GitHub
-├── 📄 config.php         # Configuration base de données
-├── 📄 auth_helper.php    # Fonctions d'authentification (nouveau)
-├── 📄 data.json          # Données personnelles (CV)
-├── 🎨 style.css          # Styles principaux
-├── 🎨 admin.css          # Styles administration (nouveau)
-├── ⚡ script.js          # Scripts principaux
-├── ⚡ admin.js           # Scripts administration (nouveau)
-├── ⚡ exo.js             # Script exercice GitHub
-├── 🖼️ assets/img/        # Images
-├── 📋 candidatures/      # Module candidatures (nouveau)
-│   ├── index.php         # Liste et statistiques
+```text
+├── 📄 index.php              # Page d'accueil
+├── 📄 cv.php                 # Page CV
+├── 📄 projets.php            # Page projets
+├── 📄 contact.php            # Page contact
+├── 📄 admin.php              # Interface d'administration
+├── 📄 exercice.html          # Démo recherche GitHub
+├── 📄 config.php             # Configuration base de données
+├── 📄 auth_helper.php        # Fonctions d'authentification (nouveau)
+├── 📄 upload.php             # Interface d'upload avec drag & drop (nouveau)
+├── 📄 upload_handler.php     # Backend de traitement des uploads (nouveau)
+├── 📄 admin_gallery.php      # Galerie d'administration des uploads (nouveau)
+├── 📄 admin_delete_upload.php # Suppression sécurisée des fichiers (nouveau)
+├── 📄 data.json              # Données personnelles (CV)
+├── 🎨 style.css              # Styles principaux
+├── 🎨 admin.css              # Styles administration (nouveau)
+├── ⚡ script.js              # Scripts principaux
+├── ⚡ admin.js               # Scripts administration (nouveau)
+├── ⚡ exo.js                 # Script exercice GitHub
+├── 🖼️ assets/img/            # Images
+├── 📁 uploads/               # Dossier des fichiers uploadés (nouveau)
+├── 📋 candidatures/          # Module candidatures (nouveau)
+│   ├── index.php             # Liste et statistiques
 │   ├── ajouter_candidature.php
 │   ├── modifier_candidature.php
 │   └── supprimer_candidature.php
-├── 🔧 .htaccess          # Configuration Apache
-├── 🤖 robots.txt         # Instructions robots
-├── 📦 package.json       # Dépendances Node.js
+├── 🔧 .htaccess              # Configuration Apache
+├── 🤖 robots.txt             # Instructions robots
+├── 📦 package.json           # Dépendances Node.js
 ```
 
 ## �️ Base de données
@@ -174,6 +188,14 @@ $pass = 'votre_password';  // Mot de passe
 - Interface CRUD complète (Create, Read, Update, Delete)
 - Statuts de suivi : en_attente, entretien, acceptée, refusée
 - Statistiques et tableaux de bord
+
+### 🖼️ Système d'upload et galerie
+- Interface moderne avec drag & drop (`upload.php`)
+- Upload séquentiel optimisé pour maximiser la bande passante
+- Support images et vidéos avec prévisualisation temps réel
+- Galerie d'administration intégrée (`admin_gallery.php`)
+- Suppression sécurisée des fichiers avec authentification
+- Logging complet dans `upload_log.csv` pour traçabilité
 - Design responsive avec badges colorés
 
 ### 🏗️ Architecture modernisée

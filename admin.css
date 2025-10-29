@@ -34,7 +34,7 @@
 
 .admin-header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 
 .admin-header p {
@@ -182,7 +182,7 @@
 .modal-content {
     background-color: var(--surface);
     margin: 2% auto;
-    padding: 0;
+    padding: 20px;
     border: none;
     border-radius: var(--radius);
     width: 90%;
@@ -242,6 +242,7 @@
 .form-group {
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
 }
 
 .form-group.full-width {
@@ -688,6 +689,11 @@
 
 .w-full {
     width: 100%;
+}
+
+.candidature-card{
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 /* ===== VARIABLES CSS ADMIN ===== */
