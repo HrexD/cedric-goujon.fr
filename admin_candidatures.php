@@ -142,292 +142,211 @@ $statuts = [
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>💼 Administration - Candidatures</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-modern.css">
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
+    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
     
-    <div class="message-header">
-        <div>
-            <h1>💼 Gestion des Candidatures</h1>
-            <p style="color: var(--text-muted);">Administration des candidatures d'emploi</p>
-        </div>
-        <div>
-            <a href="admin" class="btn-small" style="background: var(--text-muted); color: white; margin-right: 1rem;">
-                ← Tableau de bord
-            </a>
-            <button onclick="openModal('addModal')" class="cta">+ Nouvelle candidature</button>
-        </div>
-    </div>
-    
-    <!-- Messages -->
-    <?php if ($success): ?>
-        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-    <?php endif; ?>
-    <?php if ($error): ?>
-        <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
-    
-    <!-- Statistiques -->
-    <div class="stats-candidatures">
-        <div class="stat-card">
-            <span class="stat-number"><?= $stats['total'] ?></span>
-            <div class="stat-label">Total</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-number" style="color: #ffc107;"><?= $stats['en_attente'] ?></span>
-            <div class="stat-label">En attente</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-number" style="color: #17a2b8;"><?= $stats['entretien'] ?></span>
-            <div class="stat-label">Entretiens</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-number" style="color: #28a745;"><?= $stats['accepte'] ?></span>
-            <div class="stat-label">Acceptées</div>
-        </div>
-        <div class="stat-card">
-            <span class="stat-number" style="color: #dc3545;"><?= $stats['refuse'] ?></span>
-            <div class="stat-label">Refusées</div>
-        </div>
-    </div>
-    
-    <!-- Filtres -->
-    <div class="filters-candidatures">
-        <span><strong>Filtrer :</strong></span>
-        <a href="?filter=all&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
-           class="btn-small" style="background: <?= $filter === 'all' ? 'var(--accent)' : 'var(--text-muted)' ?>">
-           Toutes (<?= $stats['total'] ?>)
-        </a>
-        <a href="?filter=en_attente&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
-           class="btn-small" style="background: <?= $filter === 'en_attente' ? '#ffc107' : 'var(--text-muted)' ?>">
-           En attente (<?= $stats['en_attente'] ?>)
-        </a>
-        <a href="?filter=entretien&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
-           class="btn-small" style="background: <?= $filter === 'entretien' ? '#17a2b8' : 'var(--text-muted)' ?>">
-           Entretiens (<?= $stats['entretien'] ?>)
-        </a>
-        
-        <div style="margin-left: auto; display: flex; gap: 0.5rem;">
-            <select onchange="window.location.href='?filter=<?= $filter ?>&search=<?= urlencode($search) ?>&sort=' + this.value" 
-                    style="padding: 0.5rem; border-radius: var(--radius);">
-                <option value="date_candidature_desc" <?= $sort === 'date_candidature_desc' ? 'selected' : '' ?>>
-                    Date (récent)
-                </option>
-                <option value="date_candidature_asc" <?= $sort === 'date_candidature_asc' ? 'selected' : '' ?>>
-                    Date (ancien)
-                </option>
-                <option value="entreprise" <?= $sort === 'entreprise' ? 'selected' : '' ?>>
-                    Entreprise A-Z
-                </option>
-                <option value="statut" <?= $sort === 'statut' ? 'selected' : '' ?>>
-                    Statut
-                </option>
-            </select>
-            
-            <form method="GET" style="display: flex; gap: 0.5rem;">
-                <input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
-                <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
-                <input type="text" name="search" placeholder="Rechercher..." 
-                       value="<?= htmlspecialchars($search) ?>" class="search-input">
-                <button type="submit" class="btn-small btn-read">🔍</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Liste des candidatures -->
-    <?php if (empty($candidatures)): ?>
-        <div class="candidature-card">
-            <div class="candidature-content" style="text-align: center; padding: 3rem;">
-                <h3>📭 Aucune candidature</h3>
-                <p style="color: var(--text-muted);">Aucune candidature ne correspond à vos critères.</p>
-                <button onclick="openModal('addModal')" class="cta" style="margin-top: 1rem;">
-                    + Ajouter la première candidature
-                </button>
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="user-info">
+                <strong>� Admin</strong>
+                <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
+                    Interface d'administration
+                </div>
             </div>
-        </div>
-    <?php else: ?>
-        <?php foreach ($candidatures as $candidature): ?>
-            <div class="candidature-card">
-                <div class="candidature-header">
-                    <div>
-                        <h3 style="margin: 0; color: var(--primary);">
-                            🏢 <?= htmlspecialchars($candidature['entreprise']) ?>
-                        </h3>
-                        <div style="color: var(--text-muted); margin-top: 0.3rem;">
-                            📝 <?= htmlspecialchars($candidature['poste']) ?>
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <span class="status-badge" style="background-color: <?= $statuts[$candidature['statut']]['color'] ?>">
-                            <?= $statuts[$candidature['statut']]['label'] ?>
-                        </span>
-                        <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 0.5rem;">
-                            📅 <?= date('d/m/Y', strtotime($candidature['date_candidature'])) ?>
-                        </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="admin">📊 Tableau de bord</a></li>
+                    <li><a href="admin_candidatures.php" class="active">💼 Candidatures</a></li>
+                    <li><a href="admin_messages.php">📧 Messages</a></li>
+                    <li><a href="admin_projets.php">🚀 Projets</a></li>
+                    <li><a href="admin_gallery.php">🖼️ Galerie</a></li>
+                    <li><a href="admin_utilisateur.php">👤 Utilisateur</a></li>
+                    <li><a href="admin_systeme.php">⚙️ Système</a></li>
+                    <li style="margin-top: var(--spacing-xl); border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg);">
+                        <a href="index">🌐 Voir le site</a>
+                    </li>
+                    <li><a href="?logout=1" style="color: var(--danger-color);">🚪 Déconnexion</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>💼 Gestion des Candidatures</h1>
+                <p class="admin-subtitle">Administration des candidatures d'emploi</p>
+                <div class="header-actions">
+                    <button onclick="openModal('addModal')" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Nouvelle candidature
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Messages -->
+            <?php if ($success): ?>
+                <div class="notification notification-success">
+                    <span class="notification-icon">✅</span>
+                    <?= htmlspecialchars($success) ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($error): ?>
+                <div class="notification notification-error">
+                    <span class="notification-icon">❌</span>
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Statistiques -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-number"><?= $stats['total'] ?></div>
+                        <div class="stat-label">Total</div>
                     </div>
                 </div>
-                <div class="candidature-content">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-                        <?php if ($candidature['type_contrat']): ?>
-                            <div><strong>Type :</strong> <?= htmlspecialchars($candidature['type_contrat']) ?></div>
-                        <?php endif; ?>
-                        <?php if ($candidature['localisation']): ?>
-                            <div><strong>Localisation :</strong> 📍 <?= htmlspecialchars($candidature['localisation']) ?></div>
-                        <?php endif; ?>
-                        <?php if ($candidature['salaire']): ?>
-                            <div><strong>Salaire :</strong> 💰 <?= htmlspecialchars($candidature['salaire']) ?></div>
-                        <?php endif; ?>
-                        <?php if ($candidature['source']): ?>
-                            <div><strong>Source :</strong> <?= htmlspecialchars($candidature['source']) ?></div>
-                        <?php endif; ?>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--warning);">⏳</div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: var(--warning);"><?= $stats['en_attente'] ?></div>
+                        <div class="stat-label">En attente</div>
                     </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--info);">🎯</div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: var(--info);"><?= $stats['entretien'] ?></div>
+                        <div class="stat-label">Entretiens</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--success);">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: var(--success);"><?= $stats['accepte'] ?></div>
+                        <div class="stat-label">Acceptées</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--danger);">❌</div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: var(--danger);"><?= $stats['refuse'] ?></div>
+                        <div class="stat-label">Refusées</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filtres et actions -->
+            <div class="admin-toolbar">
+                <div class="filter-group">
+                    <span class="filter-label">Filtrer :</span>
+                    <a href="?filter=all&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
+                       class="filter-btn <?= $filter === 'all' ? 'active' : '' ?>">
+                       Toutes (<?= $stats['total'] ?>)
+                    </a>
+                    <a href="?filter=en_attente&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
+                       class="filter-btn <?= $filter === 'en_attente' ? 'active' : '' ?>">
+                       En attente (<?= $stats['en_attente'] ?>)
+                    </a>
+                    <a href="?filter=entretien&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
+                       class="filter-btn <?= $filter === 'entretien' ? 'active' : '' ?>">
+                       Entretiens (<?= $stats['entretien'] ?>)
+                    </a>
+                </div>
+                
+                <div class="toolbar-actions">
+                    <select onchange="window.location.href='?filter=<?= $filter ?>&search=<?= urlencode($search) ?>&sort=' + this.value" 
+                            class="form-select">
+                        <option value="date_candidature_desc" <?= $sort === 'date_candidature_desc' ? 'selected' : '' ?>>
+                            Date (récent)
+                        </option>
+                        <option value="date_candidature_asc" <?= $sort === 'date_candidature_asc' ? 'selected' : '' ?>>
+                            Date (ancien)
+                        </option>
+                        <option value="entreprise" <?= $sort === 'entreprise' ? 'selected' : '' ?>>
+                            Entreprise A-Z
+                        </option>
+                        <option value="statut" <?= $sort === 'statut' ? 'selected' : '' ?>>
+                            Statut
+                        </option>
+                    </select>
                     
-                    <?php if ($candidature['notes']): ?>
-                        <div style="background: var(--background); padding: 1rem; border-radius: var(--radius); margin-bottom: 1rem;">
-                            <strong>Notes :</strong><br>
-                            <?= nl2br(htmlspecialchars($candidature['notes'])) ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <div class="quick-actions">
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="action" value="update_status">
-                            <input type="hidden" name="id" value="<?= $candidature['id'] ?>">
-                            <select name="statut" onchange="this.form.submit()" class="btn-small">
-                                <?php foreach ($statuts as $key => $statut): ?>
-                                    <option value="<?= $key ?>" <?= $candidature['statut'] === $key ? 'selected' : '' ?>>
-                                        <?= $statut['label'] ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </form>
-                        
-                        <button onclick="editCandidature(<?= htmlspecialchars(json_encode($candidature)) ?>)" 
-                                class="btn-small" style="background: var(--secondary);">
-                            ✏️ Modifier
+                    <form method="GET" class="search-form">
+                        <input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
+                        <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
+                        <input type="text" name="search" placeholder="Rechercher..." 
+                               value="<?= htmlspecialchars($search) ?>" class="form-input">
+                        <button type="submit" class="btn btn-secondary">
+                            <span class="btn-icon">🔍</span>
                         </button>
-                        
-                        <a href="?delete=<?= $candidature['id'] ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
-                           class="btn-small" style="background: #dc3545;" 
-                           onclick="return confirm('Supprimer cette candidature ?')">
-                            🗑️ Supprimer
-                        </a>
-                    </div>
+                    </form>
                 </div>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-    
-    <!-- Modal Ajouter candidature -->
-    <div id="addModal" class="modal">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h2>➕ Nouvelle candidature</h2>
-                <button onclick="closeModal('addModal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✖️</button>
             </div>
             
-            <form method="POST">
-                <input type="hidden" name="action" value="add">
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>🏢 Entreprise *</label>
-                        <input type="text" name="entreprise" required>
+            <!-- Liste des candidatures -->
+            <div class="admin-content">
+                <?php if (empty($candidatures)): ?>
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <h3>Aucune candidature</h3>
+                        <p class="text-muted">Aucune candidature ne correspond à vos critères.</p>
+                        <button onclick="openModal('addModal')" class="btn btn-primary">
+                            <span class="btn-icon">➕</span>
+                            Ajouter la première candidature
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label>📝 Poste *</label>
-                        <input type="text" name="poste" required>
+                <?php else: ?>
+                    <div class="data-grid">
+                        <?php foreach ($candidatures as $candidature): ?>
+                            <div class="data-card">
+                                <div class="card-header">
+                                    <h3>🏢 <?= htmlspecialchars($candidature['entreprise']) ?></h3>
+                                    <div class="status-badge status-<?= $candidature['statut'] ?>">
+                                        <?= ucfirst(str_replace('_', ' ', $candidature['statut'])) ?>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <p><strong>Poste :</strong> <?= htmlspecialchars($candidature['poste']) ?></p>
+                                    <p><strong>Date :</strong> <?= date('d/m/Y', strtotime($candidature['date_candidature'])) ?></p>
+                                    <?php if ($candidature['localisation']): ?>
+                                        <p><strong>Lieu :</strong> <?= htmlspecialchars($candidature['localisation']) ?></p>
+                                    <?php endif; ?>
+                                    <?php if ($candidature['salaire']): ?>
+                                        <p><strong>Salaire :</strong> <?= htmlspecialchars($candidature['salaire']) ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="card-actions">
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="action" value="update_status">
+                                        <input type="hidden" name="id" value="<?= $candidature['id'] ?>">
+                                        <select name="statut" onchange="this.form.submit()" class="form-select">
+                                            <?php foreach ($statuts as $key => $statut): ?>
+                                                <option value="<?= $key ?>" <?= $candidature['statut'] === $key ? 'selected' : '' ?>>
+                                                    <?= $statut['label'] ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </form>
+                                    
+                                    <a href="?delete=<?= $candidature['id'] ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>&sort=<?= $sort ?>" 
+                                       class="btn btn-small btn-danger" 
+                                       onclick="return confirm('Supprimer cette candidature ?')">
+                                        🗑️ Supprimer
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>💼 Type de contrat</label>
-                        <select name="type_contrat">
-                            <option value="">Sélectionner...</option>
-                            <option value="CDI">CDI</option>
-                            <option value="CDD">CDD</option>
-                            <option value="Stage">Stage</option>
-                            <option value="Freelance">Freelance</option>
-                            <option value="Alternance">Alternance</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>📍 Localisation</label>
-                        <input type="text" name="localisation" placeholder="Paris, Lyon, Remote...">
-                    </div>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>💰 Salaire</label>
-                        <input type="text" name="salaire" placeholder="45k€, 500€/jour...">
-                    </div>
-                    <div class="form-group">
-                        <label>📅 Date candidature</label>
-                        <input type="date" name="date_candidature" value="<?= date('Y-m-d') ?>">
-                    </div>
-                    <div class="form-group">
-                        <label>📊 Statut</label>
-                        <select name="statut">
-                            <?php foreach ($statuts as $key => $statut): ?>
-                                <option value="<?= $key ?>" <?= $key === 'en_attente' ? 'selected' : '' ?>>
-                                    <?= $statut['label'] ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>🔗 Source</label>
-                    <input type="text" name="source" placeholder="LinkedIn, Indeed, site entreprise...">
-                </div>
-                
-                <div class="form-group">
-                    <label>📝 Notes</label>
-                    <textarea name="notes" rows="4" placeholder="Remarques, contacts, étapes..."></textarea>
-                </div>
-                
-                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                    <button type="button" onclick="closeModal('addModal')" class="btn-small" style="background: var(--text-muted);">
-                        Annuler
-                    </button>
-                    <button type="submit" class="cta">✅ Enregistrer</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal Modifier candidature -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h2>✏️ Modifier candidature</h2>
-                <button onclick="closeModal('editModal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✖️</button>
+                <?php endif; ?>
             </div>
-            
-            <form method="POST" id="editForm">
-                <input type="hidden" name="action" value="edit">
-                <input type="hidden" name="id" id="edit_id">
-                
-                <!-- Le contenu sera généré par JavaScript -->
-                <div id="editFormContent"></div>
-                
-                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                    <button type="button" onclick="closeModal('editModal')" class="btn-small" style="background: var(--text-muted);">
-                        Annuler
-                    </button>
-                    <button type="submit" class="cta">✅ Mettre à jour</button>
-                </div>
-            </form>
-        </div>
+        </main>
     </div>
-    
-    <script src="script.js"></script>
-    <script src="script.js"></script>
-    <script src="admin.js"></script>
+
+    <script src="admin-modern.js"></script>
 </body>
 </html>

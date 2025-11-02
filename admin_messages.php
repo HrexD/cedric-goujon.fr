@@ -8,13 +8,6 @@ if (!isset($_SESSION['admin_logged']) || $_SESSION['admin_logged'] !== true) {
     exit;
 }
 
-// Déconnexion
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header('Location: admin');
-    exit;
-}
-
 // Marquer un message comme lu/non lu
 if (isset($_GET['toggle_read'])) {
     $id = (int)$_GET['toggle_read'];
@@ -73,130 +66,167 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Administration - Messages de contact</title>
+    <title>📧 Administration - Messages</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-modern.css">
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
-<body>
-    <!-- Bouton thème -->
-    <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
+<body class="admin-page">
+    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <div>
-            <h1>📧 Gestion des Messages</h1>
-            <p style="color: var(--text-muted);">Administration des messages de contact</p>
-        </div>
-        <div>
-            <a href="admin" class="btn-small" style="background: var(--text-muted); color: white; margin-right: 1rem;">
-                ← Tableau de bord
-            </a>
-            <a href="?logout=1" class="btn-small btn-delete">Déconnexion</a>
-        </div>
-    </div>
-
-    <?php if (isset($error)): ?>
-        <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
-
-    <!-- Statistiques -->
-    <div class="admin-stats">
-        <div class="stat-card">
-            <h3><?= count($messages) ?></h3>
-            <p>Messages total</p>
-        </div>
-        <div class="stat-card">
-            <h3 style="color: var(--accent);"><?= $unread_count ?></h3>
-            <p>Non lus</p>
-        </div>
-        <div class="stat-card">
-            <h3><?= count($messages) - $unread_count ?></h3>
-            <p>Lus</p>
-        </div>
-    </div>
-
-    <!-- Filtres et recherche -->
-    <div class="filters">
-        <span><strong>Filtrer :</strong></span>
-        <a href="?filter=all&search=<?= htmlspecialchars($search) ?>" 
-           class="btn-small <?= $filter === 'all' ? 'btn-read' : '' ?>" 
-           style="background: <?= $filter === 'all' ? 'var(--accent)' : 'var(--text-muted)' ?>">
-           Tous (<?= count($messages) ?>)
-        </a>
-        <a href="?filter=unread&search=<?= htmlspecialchars($search) ?>" 
-           class="btn-small <?= $filter === 'unread' ? 'btn-read' : '' ?>"
-           style="background: <?= $filter === 'unread' ? 'var(--accent)' : 'var(--text-muted)' ?>">
-           Non lus (<?= $unread_count ?>)
-        </a>
-        <a href="?filter=read&search=<?= htmlspecialchars($search) ?>" 
-           class="btn-small <?= $filter === 'read' ? 'btn-read' : '' ?>"
-           style="background: <?= $filter === 'read' ? 'var(--accent)' : 'var(--text-muted)' ?>">
-           Lus (<?= count($messages) - $unread_count ?>)
-        </a>
-        
-        <form method="GET" style="margin-left: auto; display: flex; gap: 0.5rem;">
-            <input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
-            <input type="text" name="search" placeholder="Rechercher..." 
-                   value="<?= htmlspecialchars($search) ?>" class="search-input">
-            <button type="submit" class="btn-small btn-read">🔍</button>
-        </form>
-    </div>
-
-    <!-- Messages -->
-    <?php if (empty($messages)): ?>
-        <div class="message-card">
-            <div class="message-content" style="text-align: center; color: var(--text-muted);">
-                <h3>📭 Aucun message</h3>
-                <p>Aucun message ne correspond à vos critères de recherche.</p>
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="user-info">
+                <strong>� Admin</strong>
+                <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
+                    Interface d'administration
+                </div>
             </div>
-        </div>
-    <?php else: ?>
-        <?php foreach ($messages as $message): ?>
-            <div class="message-card <?= !$message['lu'] ? 'message-unread' : '' ?>">
-                <div class="message-header">
-                    <div>
-                        <strong style="color: var(--accent);">
-                            <?= !$message['lu'] ? '🔴 ' : '✅ ' ?>
-                            <?= htmlspecialchars($message['nom']) ?>
-                        </strong>
-                        <span style="color: var(--text-muted); margin-left: 1rem;">
-                            <?= htmlspecialchars($message['email']) ?>
-                        </span>
-                        <span style="color: var(--text-muted); margin-left: 1rem; font-size: 0.9em;">
-                            📅 <?= date('d/m/Y à H:i', strtotime($message['date_envoi'])) ?>
-                        </span>
-                    </div>
-                    <div class="actions">
-                        <a href="?toggle_read=<?= $message['id'] ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" 
-                           class="btn-small <?= $message['lu'] ? 'btn-unread' : 'btn-read' ?>">
-                            <?= $message['lu'] ? 'Marquer non lu' : 'Marquer lu' ?>
-                        </a>
-                        <a href="?delete=<?= $message['id'] ?>" 
-                           class="btn-small btn-delete" 
-                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?')">
-                            🗑️ Supprimer
-                        </a>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="admin">📊 Tableau de bord</a></li>
+                    <li><a href="admin_candidatures.php">💼 Candidatures</a></li>
+                    <li><a href="admin_messages.php" class="active">📧 Messages</a></li>
+                    <li><a href="admin_projets.php">🚀 Projets</a></li>
+                    <li><a href="admin_gallery.php">🖼️ Galerie</a></li>
+                    <li><a href="admin_utilisateur.php">👤 Utilisateur</a></li>
+                    <li><a href="admin_systeme.php">⚙️ Système</a></li>
+                    <li style="margin-top: var(--spacing-xl); border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg);">
+                        <a href="index">🌐 Voir le site</a>
+                    </li>
+                    <li><a href="?logout=1" style="color: var(--danger-color);">🚪 Déconnexion</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>📧 Gestion des Messages</h1>
+                <p class="admin-subtitle">Administration des messages de contact</p>
+            </div>
+            
+            <?php if (isset($error)): ?>
+                <div class="notification notification-error">
+                    <span class="notification-icon">❌</span>
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Statistiques -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📧</div>
+                    <div class="stat-content">
+                        <div class="stat-number"><?= count($messages) ?></div>
+                        <div class="stat-label">Messages total</div>
                     </div>
                 </div>
-                <div class="message-content">
-                    <h4 style="margin: 0 0 1rem 0; color: var(--primary);">
-                        📝 <?= htmlspecialchars($message['sujet']) ?>
-                    </h4>
-                    <div style="background: var(--background); padding: 1rem; border-radius: var(--radius); line-height: 1.6;">
-                        <?= nl2br(htmlspecialchars($message['message'])) ?>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--warning);">🔔</div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: var(--warning);"><?= $unread_count ?></div>
+                        <div class="stat-label">Non lus</div>
                     </div>
-                    <div style="margin-top: 1rem;">
-                        <a href="mailto:<?= htmlspecialchars($message['email']) ?>?subject=Re: <?= htmlspecialchars($message['sujet']) ?>" 
-                           class="cta" style="display: inline-block;">
-                            📧 Répondre par email
-                        </a>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: var(--success);">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-number" style="color: var(--success);"><?= count($messages) - $unread_count ?></div>
+                        <div class="stat-label">Lus</div>
                     </div>
                 </div>
             </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
 
-    <script src="script.js"></script>
-    <script src="admin.js"></script>
+            <!-- Filtres et recherche -->
+            <div class="admin-toolbar">
+                <div class="filter-group">
+                    <span class="filter-label">Filtrer :</span>
+                    <a href="?filter=all&search=<?= htmlspecialchars($search) ?>" 
+                       class="filter-btn <?= $filter === 'all' ? 'active' : '' ?>">
+                       Tous (<?= count($messages) ?>)
+                    </a>
+                    <a href="?filter=unread&search=<?= htmlspecialchars($search) ?>" 
+                       class="filter-btn <?= $filter === 'unread' ? 'active' : '' ?>">
+                       Non lus (<?= $unread_count ?>)
+                    </a>
+                    <a href="?filter=read&search=<?= htmlspecialchars($search) ?>" 
+                       class="filter-btn <?= $filter === 'read' ? 'active' : '' ?>">
+                       Lus (<?= count($messages) - $unread_count ?>)
+                    </a>
+                </div>
+                
+                <div class="toolbar-actions">
+                    <form method="GET" class="search-form">
+                        <input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
+                        <input type="text" name="search" placeholder="Rechercher..." 
+                               value="<?= htmlspecialchars($search) ?>" class="form-input">
+                        <button type="submit" class="btn btn-secondary">
+                            <span class="btn-icon">🔍</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Liste des messages -->
+            <div class="admin-content">
+                <?php if (empty($messages)): ?>
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <h3>Aucun message</h3>
+                        <p class="text-muted">Aucun message ne correspond à vos critères.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="data-grid">
+                        <?php foreach ($messages as $message): ?>
+                            <div class="data-card <?= !$message['lu'] ? 'unread' : '' ?>">
+                                <div class="card-header">
+                                    <h3>
+                                        <?= !$message['lu'] ? '🔔 ' : '📧 ' ?>
+                                        <?= htmlspecialchars($message['nom']) ?>
+                                    </h3>
+                                    <div class="message-date">
+                                        <?= date('d/m/Y H:i', strtotime($message['date_envoi'])) ?>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <p><strong>Email :</strong> 
+                                        <a href="mailto:<?= htmlspecialchars($message['email']) ?>" class="email-link">
+                                            <?= htmlspecialchars($message['email']) ?>
+                                        </a>
+                                    </p>
+                                    <p><strong>Sujet :</strong> <?= htmlspecialchars($message['sujet']) ?></p>
+                                    <div class="message-content">
+                                        <?= nl2br(htmlspecialchars($message['message'])) ?>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="?toggle_read=<?= $message['id'] ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" 
+                                       class="btn btn-small <?= $message['lu'] ? 'btn-warning' : 'btn-success' ?>">
+                                        <?= $message['lu'] ? '📖 Marquer non lu' : '✅ Marquer lu' ?>
+                                    </a>
+                                    
+                                    <a href="mailto:<?= htmlspecialchars($message['email']) ?>?subject=Re: <?= urlencode($message['sujet']) ?>" 
+                                       class="btn btn-small btn-primary">
+                                        📧 Répondre
+                                    </a>
+                                    
+                                    <a href="?delete=<?= $message['id'] ?>&filter=<?= $filter ?>&search=<?= urlencode($search) ?>" 
+                                       class="btn btn-small btn-danger" 
+                                       onclick="return confirm('Supprimer ce message ?')">
+                                        🗑️ Supprimer
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin-modern.js"></script>
 </body>
 </html>

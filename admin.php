@@ -26,11 +26,11 @@ if (!isset($_SESSION['admin_logged']) || $_SESSION['admin_logged'] !== true) {
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>🔐 Administration - Connexion</title>
             <link rel="stylesheet" href="style.css">
-            <link rel="stylesheet" href="admin.css">
+            <link rel="stylesheet" href="admin-modern.css">
             <link rel="icon" type="image/x-icon" href="favicon.png">
         </head>
-        <body>
-            <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
+        <body class="admin-page">
+            <button id="theme-toggle" aria-label="Basculer thème" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--surface); border: 2px solid var(--border-color); border-radius: 50%; width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer; transition: all var(--transition-normal);">☀️</button>
             
             <div class="login-container">
                 <h1>🔐 Administration</h1>
@@ -44,21 +44,21 @@ if (!isset($_SESSION['admin_logged']) || $_SESSION['admin_logged'] !== true) {
                 <?php endif; ?>
                 
                 <form method="POST" class="login-form">
-                    <input type="text" name="username" placeholder="👤 Nom d'utilisateur" required>
-                    <input type="password" name="password" placeholder="🔑 Mot de passe" required>
-                    <button type="submit" class="cta" style="width: 100%; margin-top: 1rem;">
+                    <input type="text" name="username" class="form-input" placeholder="👤 Nom d'utilisateur" required>
+                    <input type="password" name="password" class="form-input" placeholder="🔑 Mot de passe" required>
+                    <button type="submit" class="btn btn-large" style="width: 100%; margin-top: var(--spacing-lg);">
                         🚪 Se connecter
                     </button>
                 </form>
                 
-                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--text-muted);">
-                    <a href="index" class="btn-small" style="color: var(--text-muted);">
+                <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1px solid var(--border-color);">
+                    <a href="index" class="btn btn-outline btn-small" style="text-decoration: none;">
                         ← Retour au site
                     </a>
                 </div>
             </div>
             
-            <script src="script.js"></script>
+            <script src="admin-modern.js"></script>
         </body>
         </html>
         <?php
@@ -142,36 +142,36 @@ $system_info = [
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>🎛️ Administration - Tableau de bord</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-modern.css">
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
+    <button id="theme-toggle" aria-label="Basculer thème" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--surface); border: 2px solid var(--border-color); border-radius: 50%; width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer; transition: all var(--transition-normal);">☀️</button>
     
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="user-info">
-                <strong>👤 Cédric</strong>
-                <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 0.5rem;">
-                    Connecté depuis <?= date('H:i', $_SESSION['login_time']) ?>
+                <strong>👤 Admin</strong>
+                <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
+                    Connecté depuis <?= date('H:i', $_SESSION['login_time'] ?? time()) ?>
                 </div>
             </div>
             
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="admin"><span class="icon">🎛️</span> Tableau de bord</a></li>
-                    <li><a href="admin_messages"><span class="icon">📧</span> Messages</a></li>
-                    <li><a href="admin_candidatures"><span class="icon">💼</span> Candidatures</a></li>
-                    <li><a href="admin_projets"><span class="icon">🚀</span> Projets</a></li>
-                    <li><a href="admin_gallery"><span class="icon">🖼️</span> Galerie</a></li>
-                    <li><a href="admin_utilisateur"><span class="icon">👤</span> Profil</a></li>
-                    <li><a href="admin_systeme"><span class="icon">⚙️</span> Système</a></li>
-                    <li style="margin-top: 2rem; border-top: 1px solid var(--background); padding-top: 1rem;">
-                        <a href="index" style="color: var(--text-muted);"><span class="icon">🌐</span> Voir le site</a>
-                    </li>
-                    <li><a href="?logout=1" style="color: #dc3545;"><span class="icon">🚪</span> Déconnexion</a></li>
-                </ul>
+                <li><a href="admin" class="active">📊 Tableau de bord</a></li>
+                <li><a href="admin_candidatures.php">💼 Candidatures</a></li>
+                <li><a href="admin_messages.php">📧 Messages</a></li>
+                <li><a href="admin_projets.php">🚀 Projets</a></li>
+                <li><a href="admin_gallery.php">🖼️ Galerie</a></li>
+                <li><a href="admin_utilisateur.php">👤 Utilisateur</a></li>
+                <li><a href="admin_systeme.php">⚙️ Système</a></li>
+                <li style="margin-top: var(--spacing-xl); border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg);">
+                    <a href="index">🌐 Voir le site</a>
+                </li>
+                <li><a href="?logout=1" style="color: var(--danger-color);">🚪 Déconnexion</a></li>
+            </ul>
             </nav>
         </aside>
         
@@ -188,39 +188,48 @@ $system_info = [
             <!-- Statistiques principales -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number"><?= $stats_messages['total'] ?></span>
+                    <div class="stat-icon">📧</div>
+                    <div class="stat-value"><?= $stats_messages['total'] ?></div>
                     <div class="stat-label">Messages reçus</div>
                     <?php if ($stats_messages['unread'] > 0): ?>
-                        <div style="color: var(--accent); margin-top: 0.5rem; font-weight: bold;">
+                        <div class="badge badge-danger mt-sm">
                             <?= $stats_messages['unread'] ?> non lu(s)
                         </div>
                     <?php endif; ?>
                 </div>
                 
                 <div class="stat-card">
-                    <span class="stat-number"><?= $stats_candidatures['total'] ?></span>
+                    <div class="stat-icon">💼</div>
+                    <div class="stat-value"><?= $stats_candidatures['total'] ?></div>
                     <div class="stat-label">Candidatures</div>
                     <?php if ($stats_candidatures['pending'] > 0): ?>
-                        <div style="color: var(--accent); margin-top: 0.5rem; font-weight: bold;">
+                        <div class="badge badge-warning mt-sm">
                             <?= $stats_candidatures['pending'] ?> en attente
                         </div>
                     <?php endif; ?>
                 </div>
                 
                 <div class="stat-card">
-                    <span class="stat-number"><?= $stats_projets['total'] ?></span>
+                    <div class="stat-icon">🚀</div>
+                    <div class="stat-value"><?= $stats_projets['total'] ?></div>
                     <div class="stat-label">Projets</div>
-                    <div style="color: var(--secondary); margin-top: 0.5rem;">
+                    <div class="badge badge-success mt-sm">
                         <?= $stats_projets['active'] ?> actif(s)
                     </div>
                 </div>
                 
                 <div class="stat-card">
-                    <span class="stat-number"><?= $stats_messages['today'] ?></span>
-                    <div class="stat-label">Messages aujourd'hui</div>
-                    <div style="color: var(--secondary); margin-top: 0.5rem;">
-                        <?= $stats_candidatures['recent'] ?> candidatures (7j)
-                    </div>
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value"><?= $stats_candidatures['recent'] ?></div>
+                    <div class="stat-label">Cette semaine</div>
+                </div>
+            </div>
+            
+            <!-- Messages récents et actions rapides -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+                <!-- Messages récents -->
+                <div class="admin-card">
+                    <h2 class="section-title">📧 Messages récents</h2>
                 </div>
             </div>
             
@@ -234,83 +243,78 @@ $system_info = [
                     </h3>
                     
                     <?php if (empty($recent_messages)): ?>
-                        <div style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                            📭 Aucun message
+                        <div class="text-center text-muted" style="padding: var(--spacing-xl);">
+                            📭 Aucun message récent
                         </div>
                     <?php else: ?>
-                        <?php foreach ($recent_messages as $message): ?>
-                            <div class="recent-item">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <strong style="color: <?= $message['lu'] ? 'var(--text)' : 'var(--accent)' ?>;">
-                                            <?= $message['lu'] ? '✅' : '🔴' ?> <?= htmlspecialchars($message['nom']) ?>
-                                        </strong>
-                                        <div style="font-size: 0.9em; color: var(--text-muted); margin-top: 0.2rem;">
-                                            <?= htmlspecialchars(substr($message['sujet'], 0, 40)) ?><?= strlen($message['sujet']) > 40 ? '...' : '' ?>
-                                        </div>
-                                    </div>
-                                    <div style="font-size: 0.8em; color: var(--text-muted);">
-                                        <?= date('d/m H:i', strtotime($message['date_envoi'])) ?>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                        <div class="admin-table">
+                            <tbody>
+                                <?php foreach ($recent_messages as $message): ?>
+                                    <tr style="border-bottom: 1px solid var(--border-color);">
+                                        <td style="padding: var(--spacing-md);">
+                                            <div class="flex items-center gap-sm">
+                                                <span style="font-size: 1.2rem;">
+                                                    <?= $message['lu'] ? '✅' : '🔴' ?>
+                                                </span>
+                                                <div>
+                                                    <div class="font-semibold <?= $message['lu'] ? '' : 'text-primary' ?>">
+                                                        <?= htmlspecialchars($message['nom']) ?>
+                                                    </div>
+                                                    <div class="text-sm text-muted">
+                                                        <?= htmlspecialchars(substr($message['sujet'], 0, 50)) ?><?= strlen($message['sujet']) > 50 ? '...' : '' ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-right text-sm text-muted" style="padding: var(--spacing-md);">
+                                            <?= date('d/m H:i', strtotime($message['date_envoi'])) ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </div>
                     <?php endif; ?>
+                    
+                    <div class="text-center mt-lg">
+                        <a href="admin_messages" class="btn btn-outline">Voir tous les messages</a>
+                    </div>
                 </div>
                 
-                <!-- Candidatures récentes -->
-                <div class="recent-card">
-                    <h3 style="margin-bottom: 1rem; color: var(--primary);">
-                        💼 Candidatures récentes
-                        <a href="admin_candidatures" style="float: right; font-size: 0.8em; color: var(--accent);">Voir toutes →</a>
-                    </h3>
+                <!-- Actions rapides -->
+                <div class="admin-card">
+                    <h2 class="section-title">⚡ Actions rapides</h2>
                     
-                    <?php if (empty($recent_candidatures)): ?>
-                        <div style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                            📋 Aucune candidature
-                        </div>
-                    <?php else: ?>
-                        <?php foreach ($recent_candidatures as $candidature): ?>
-                            <div class="recent-item">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <strong><?= htmlspecialchars($candidature['entreprise']) ?></strong>
-                                        <div style="font-size: 0.9em; color: var(--text-muted); margin-top: 0.2rem;">
-                                            <?= htmlspecialchars($candidature['poste']) ?>
-                                        </div>
-                                        <div style="font-size: 0.8em; margin-top: 0.3rem;">
-                                            <span style="background: var(--accent); color: white; padding: 0.2rem 0.5rem; border-radius: 10px;">
-                                                <?= ucfirst(str_replace('_', ' ', $candidature['statut'])) ?>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div style="font-size: 0.8em; color: var(--text-muted);">
-                                        <?= date('d/m/Y', strtotime($candidature['date_candidature'])) ?>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-            
-            <!-- Informations système -->
-            <div class="recent-card" style="margin-top: 2rem;">
-                <h3 style="margin-bottom: 1rem; color: var(--primary);">⚙️ Informations système</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div><strong>PHP :</strong> <?= $system_info['php_version'] ?></div>
-                    <div><strong>MySQL :</strong> <?= $system_info['mysql_version'] ?></div>
-                    <div><strong>Serveur :</strong> <?= htmlspecialchars($system_info['server']) ?></div>
-                    <?php if ($system_info['disk_space']): ?>
-                        <div><strong>Espace libre :</strong> <?= round($system_info['disk_space'] / 1024 / 1024 / 1024, 2) ?> GB</div>
-                    <?php endif; ?>
+                    <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                        <a href="upload.php" class="btn btn-primary">
+                            📤 Uploader des fichiers
+                        </a>
+                        <a href="admin_messages" class="btn btn-secondary">
+                            📧 Gérer les messages
+                        </a>
+                        <a href="admin_candidatures" class="btn btn-secondary">
+                            💼 Gérer les candidatures
+                        </a>
+                        <a href="admin_gallery" class="btn btn-secondary">
+                            🖼️ Galerie de fichiers
+                        </a>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <h3 class="section-title" style="font-size: var(--font-size-lg);">📊 Infos système</h3>
+                    <div style="font-size: var(--font-size-sm); color: var(--text-muted); line-height: 1.8;">
+                        <div><strong>PHP:</strong> <?= $system_info['php_version'] ?></div>
+                        <div><strong>MySQL:</strong> <?= $system_info['mysql_version'] ?></div>
+                        <div><strong>Serveur:</strong> <?= htmlspecialchars($system_info['server']) ?></div>
+                        <?php if ($system_info['disk_space']): ?>
+                            <div><strong>Espace disque:</strong> <?= round($system_info['disk_space'] / 1024 / 1024 / 1024, 2) ?> GB</div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
-    
-    <script src="script.js"></script>
-    <script src="admin.js"></script>
-    <script src="message_widget.js"></script>
+
+    <script src="admin-modern.js"></script>
 </body>
 </html>

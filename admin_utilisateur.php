@@ -101,31 +101,59 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>👤 Administration - Profil</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-modern.css">
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
-    
-    <div class="message-header">
-        <div>
-            <h1>👤 Profil Administrateur</h1>
-            <p style="color: var(--text-muted);">Gestion des informations personnelles et sécurité</p>
-        </div>
-        <div>
-            <a href="admin" class="btn-small" style="background: var(--text-muted); color: white;">
-                ← Tableau de bord
-            </a>
-        </div>
-    </div>
-    
-    <!-- Messages -->
-    <?php if ($success): ?>
-        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-    <?php endif; ?>
-    <?php if ($error): ?>
-        <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
-    <?php endif; ?>
+    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="user-info">
+                <strong>👤 Admin</strong>
+                <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
+                    Interface d'administration
+                </div>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                <li><a href="admin">📊 Tableau de bord</a></li>
+                <li><a href="admin_candidatures.php">💼 Candidatures</a></li>
+                <li><a href="admin_messages.php">📧 Messages</a></li>
+                <li><a href="admin_projets.php">🚀 Projets</a></li>
+                <li><a href="admin_gallery.php">🖼️ Galerie</a></li>
+                <li><a href="admin_utilisateur.php" class="active">👤 Utilisateur</a></li>
+                <li><a href="admin_systeme.php">⚙️ Système</a></li>
+                <li style="margin-top: var(--spacing-xl); border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg);">
+                    <a href="index">🌐 Voir le site</a>
+                </li>
+                <li><a href="?logout=1" style="color: var(--danger-color);">🚪 Déconnexion</a></li>
+            </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>👤 Profil Administrateur</h1>
+                <p class="admin-subtitle">Gestion des informations personnelles et sécurité</p>
+            </div>
+            
+            <!-- Messages -->
+            <?php if ($success): ?>
+                <div class="notification notification-success">
+                    <span class="notification-icon">✅</span>
+                    <?= htmlspecialchars($success) ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($error): ?>
+                <div class="notification notification-error">
+                    <span class="notification-icon">❌</span>
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
     
     <!-- Statistiques du profil -->
     <div class="stats-profile">
@@ -326,7 +354,9 @@ try {
         </div>
     </div>
     
-    <script src="script.js"></script>
-    <script src="admin.js"></script>
+        </main>
+    </div>
+
+    <script src="admin-modern.js"></script>
 </body>
 </html>

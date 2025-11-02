@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Galerie - Démonstration</title>
+    <link rel="stylesheet" href="gallery-styles.css">
+</head>
+<body>
+    <div class="gallery-container">
+        <div class="gallery-header">
+            <h1 class="gallery-title">🖼️ Test Galerie Modernisée</h1>
+            <p>Démonstration des nouvelles fonctionnalités de galerie</p>
+        </div>
+
+        <div class="gallery-stats">
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Total fichiers</div>
+            </div>
+            <div class="stat-card images">
+                <div class="stat-value">1</div>
+                <div class="stat-label">📷 Images</div>
+            </div>
+            <div class="stat-card videos">
+                <div class="stat-value">1</div>
+                <div class="stat-label">🎥 Vidéos</div>
+            </div>
+            <div class="stat-card others">
+                <div class="stat-value">1</div>
+                <div class="stat-label">📄 Autres</div>
+            </div>
+        </div>
+
+        <div class="gallery-filters">
+            <div class="filter-group">
+                <span class="filter-label">🔍 Rechercher :</span>
+                <input type="text" id="searchInput" class="filter-input" placeholder="Nom de fichier...">
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Type :</span>
+                <select id="typeFilter" class="filter-select">
+                    <option value="all">Tous les fichiers</option>
+                    <option value="image">📷 Images</option>
+                    <option value="video">🎥 Vidéos</option>
+                    <option value="other">📄 Autres</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Taille :</span>
+                <select id="sizeFilter" class="filter-select">
+                    <option value="all">Toutes tailles</option>
+                    <option value="small">< 1 MB</option>
+                    <option value="medium">1-10 MB</option>
+                    <option value="large">10-100 MB</option>
+                    <option value="xlarge">> 100 MB</option>
+                </select>
+            </div>
+            <button id="clearFilters" class="clear-filters">Effacer filtres</button>
+            <div style="margin-left:auto;display:flex;gap:var(--spacing-sm);">
+                <button id="selectAllBtn" class="filter-btn">Tout sélectionner</button>
+                <button id="deselectAllBtn" class="filter-btn">Tout désélectionner</button>
+            </div>
+        </div>
+
+        <div class="gallery-grid">
+            <!-- Image de test -->
+            <div class="gallery-card" data-filename="moi.jpg" data-type="image" data-size="156842" data-date="1732825600">
+                <input type="checkbox" class="card-checkbox" data-filename="moi.jpg">
+                <div class="card-media">
+                    <img src="uploads/moi.jpg" class="card-thumbnail" alt="moi.jpg">
+                    <div class="card-overlay"></div>
+                    <div class="card-actions">
+                        <button class="action-btn view" data-action="view" title="Visualiser">👁️</button>
+                        <button class="action-btn download" data-action="download" title="Télécharger">📥</button>
+                        <button class="action-btn delete" data-action="delete" title="Supprimer">🗑️</button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">moi.jpg</h3>
+                    <div class="card-meta">
+                        <span class="file-type-badge image">IMAGE</span>
+                        <span>153 KB • 29/10 10:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vidéo de test -->
+            <div class="gallery-card" data-filename="demo.mp4" data-type="video" data-size="2048576" data-date="1732825700">
+                <input type="checkbox" class="card-checkbox" data-filename="demo.mp4">
+                <div class="card-media">
+                    <div class="card-thumbnail" style="display:flex;align-items:center;justify-content:center;color:var(--gray-600);font-size:3rem;">🎥</div>
+                    <div class="card-overlay"></div>
+                    <div class="card-actions">
+                        <button class="action-btn view" data-action="view" title="Visualiser">👁️</button>
+                        <button class="action-btn download" data-action="download" title="Télécharger">📥</button>
+                        <button class="action-btn delete" data-action="delete" title="Supprimer">🗑️</button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">demo.mp4</h3>
+                    <div class="card-meta">
+                        <span class="file-type-badge video">VIDEO</span>
+                        <span>2 MB • 29/10 10:02</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fichier de test -->
+            <div class="gallery-card" data-filename="test1.txt" data-type="other" data-size="1024" data-date="1732825800">
+                <input type="checkbox" class="card-checkbox" data-filename="test1.txt">
+                <div class="card-media">
+                    <div class="card-thumbnail" style="display:flex;align-items:center;justify-content:center;color:var(--gray-600);font-size:3rem;">📄</div>
+                    <div class="card-overlay"></div>
+                    <div class="card-actions">
+                        <button class="action-btn view" data-action="view" title="Visualiser">👁️</button>
+                        <button class="action-btn download" data-action="download" title="Télécharger">📥</button>
+                        <button class="action-btn delete" data-action="delete" title="Supprimer">🗑️</button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">test1.txt</h3>
+                    <div class="card-meta">
+                        <span class="file-type-badge other">OTHER</span>
+                        <span>1 KB • 29/10 10:03</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contrôles de sélection multiple -->
+    <div id="selectionControls" class="selection-controls">
+        <span class="selection-counter">0 fichier(s) sélectionné(s)</span>
+        <div class="bulk-actions">
+            <button onclick="bulkDownload()" class="bulk-btn download">📥 Télécharger sélection</button>
+            <button onclick="bulkDelete()" class="bulk-btn delete">🗑️ Supprimer sélection</button>
+            <button onclick="clearSelection()" class="bulk-btn cancel">Annuler</button>
+        </div>
+    </div>
+
+    <script src="gallery-script.js"></script>
+    
+    <script>
+        // Simulation des fonctions de suppression pour le test
+        window.bulkDelete = () => {
+            alert('Fonction de suppression groupée - à connecter à votre backend');
+        };
+        
+        // Test de notification
+        setTimeout(() => {
+            if (window.gallery) {
+                gallery.showToast('🎉 Galerie modernisée chargée avec succès !', 'success');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

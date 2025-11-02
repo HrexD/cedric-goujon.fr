@@ -143,35 +143,62 @@ $statuts = [
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>🚀 Administration - Projets</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-modern.css">
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <div>
-            <h1>🚀 Gestion des Projets</h1>
-            <p style="color: var(--text-muted);">Administration du portfolio de projets</p>
-        </div>
-        <div>
-            <a href="admin" class="btn-small" style="background: var(--text-muted); color: white; margin-right: 1rem;">
-                ← Tableau de bord
-            </a>
-            <button onclick="openModal('addModal')" class="cta">+ Nouveau projet</button>
-        </div>
-    </div>
+    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="user-info">
+                <strong>� Admin</strong>
+                <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
+                    Interface d'administration
+                </div>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="admin">📊 Tableau de bord</a></li>
+                    <li><a href="admin_candidatures.php">💼 Candidatures</a></li>
+                    <li><a href="admin_messages.php">📧 Messages</a></li>
+                    <li><a href="admin_projets.php" class="active">🚀 Projets</a></li>
+                    <li><a href="admin_gallery.php">🖼️ Galerie</a></li>
+                    <li><a href="admin_utilisateur.php">👤 Utilisateur</a></li>
+                    <li><a href="admin_systeme.php">⚙️ Système</a></li>
+                    <li style="margin-top: var(--spacing-xl); border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg);">
+                        <a href="index">🌐 Voir le site</a>
+                    </li>
+                    <li><a href="?logout=1" style="color: var(--danger-color);">🚪 Déconnexion</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>🚀 Gestion des Projets</h1>
+                <p class="admin-subtitle">Administration du portfolio de projets</p>
+                <div class="header-actions">
+                    <button onclick="openModal('addModal')" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Nouveau projet
+                    </button>
+                </div>
+            </div>
     
     <!-- Messages -->
     <?php if ($success): ?>
-        <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+        <div class="notification notification-success"><?= htmlspecialchars($success) ?></div>
     <?php endif; ?>
     <?php if ($error): ?>
-        <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
+        <div class="notification notification-error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
     
     <!-- Statistiques -->
-    <div class="stats-candidatures">
+    <div class="stats-grid">
         <div class="stat-card">
             <span class="stat-number"><?= $stats['total'] ?></span>
             <div class="stat-label">Total</div>
@@ -485,7 +512,9 @@ $statuts = [
             }
         }
     </script>
-    <script src="script.js"></script>
-    <script src="admin.js"></script>
+        </main>
+    </div>
+
+    <script src="admin-modern.js"></script>
 </body>
 </html>
