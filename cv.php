@@ -48,7 +48,6 @@ foreach ($technos as $t) {
 </head>
 <body class="cv-page">
     <?= generateNavigation('cv') ?>
-    <button id="theme-toggle" aria-label="Basculer le thème">🌙</button>
 
     <div class="cv-container">
         <!-- Hero Section -->
