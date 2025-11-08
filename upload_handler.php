@@ -117,13 +117,15 @@ try {
         throw new Exception('Impossible de déplacer le fichier', 500);
     }
 
-    // Journaliser l'upload (simple CSV) pour audit / debug : timestamp, ip, origName, storedName, size
+    // Journaliser l'upload (simple CSV) pour audit / debug : timestamp, ip, origName, storedName, size, user_agent
     try {
-        $logDir = $uploadDir;
+        $logDir = __DIR__ . DIRECTORY_SEPARATOR . 'logs';
+        if (!is_dir($logDir)) mkdir($logDir, 0755, true);
         $logFile = $logDir . DIRECTORY_SEPARATOR . 'upload_log.csv';
         $fp = fopen($logFile, 'a');
         if ($fp) {
-            fputcsv($fp, [date('c'), $_SERVER['REMOTE_ADDR'] ?? 'unknown', $file['name'], basename($target), $file['size']]);
+            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+            fputcsv($fp, [date('c'), $_SERVER['REMOTE_ADDR'] ?? 'unknown', $file['name'], basename($target), $file['size'], $userAgent]);
             fclose($fp);
         }
     } catch (Exception $e) {

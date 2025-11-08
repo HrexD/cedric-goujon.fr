@@ -274,6 +274,10 @@ class AdminManager {
   // =======================
 
   setupTables() {
+    // Éviter le setup multiple
+    if (this.tablesSetup) return;
+    this.tablesSetup = true;
+    
     const tables = document.querySelectorAll('.admin-table');
     tables.forEach(table => {
       this.makeTableResponsive(table);
@@ -283,6 +287,16 @@ class AdminManager {
   }
 
   makeTableResponsive(table) {
+    // Vérifier si la table n'est pas déjà dans un wrapper responsive
+    if (table.parentNode && table.parentNode.style.overflowX === 'auto') {
+      return; // Déjà wrappé
+    }
+    
+    if (!table.parentNode) {
+      console.warn('Table sans parent trouvée, ignorée');
+      return;
+    }
+    
     const wrapper = document.createElement('div');
     wrapper.style.cssText = `
       overflow-x: auto;
@@ -343,14 +357,32 @@ class AdminManager {
   addTableFiltering(table) {
     if (table.dataset.filterable === 'false') return;
 
+    // Vérifier si le filtre n'existe pas déjà
     const wrapper = table.closest('div');
+    if (!wrapper) {
+      console.warn('Wrapper non trouvé pour la table, impossible d\'ajouter le filtre');
+      return;
+    }
+    
+    // Vérifier si un input de filtre existe déjà
+    const existingFilter = wrapper.querySelector('input[placeholder*="Filtrer"]');
+    if (existingFilter) {
+      return; // Filtre déjà présent
+    }
+
     const filterInput = document.createElement('input');
     filterInput.type = 'text';
     filterInput.placeholder = '🔍 Filtrer le tableau...';
     filterInput.className = 'form-input';
     filterInput.style.marginBottom = 'var(--spacing-md)';
     
-    wrapper.insertBefore(filterInput, table);
+    // Vérifier que la table est bien un enfant du wrapper
+    if (wrapper.contains(table)) {
+      wrapper.insertBefore(filterInput, table);
+    } else {
+      console.warn('Table non trouvée dans le wrapper, impossible d\'ajouter le filtre');
+      return;
+    }
     
     let filterTimeout;
     filterInput.addEventListener('input', () => {
@@ -548,12 +580,7 @@ let adminManager = null;
 document.addEventListener('DOMContentLoaded', () => {
   adminManager = new AdminManager();
   
-  // Afficher un message de bienvenue
-  setTimeout(() => {
-    if (adminManager) {
-      adminManager.showNotification('🎉 Interface d\'administration modernisée chargée !', 'success');
-    }
-  }, 1000);
+  // Notification de bienvenue supprimée
 });
 
 // Fonctions exposées globalement
@@ -569,7 +596,116 @@ window.exportTable = (table, filename) => {
   }
 };
 
+// Fonctions modales
+window.openModal = (modalId) => {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Animation d'apparition
+    modal.style.opacity = '0';
+    setTimeout(() => {
+      modal.style.opacity = '1';
+    }, 10);
+  }
+};
+
+window.closeModal = (modalId) => {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.opacity = '0';
+    setTimeout(() => {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }, 200);
+  }
+};
+
+// Fermer modal en cliquant à l'extérieur
+window.addEventListener('click', (event) => {
+  if (event.target.classList.contains('modal')) {
+    const modalId = event.target.id;
+    if (modalId) {
+      closeModal(modalId);
+    }
+  }
+});
+
+// Fermer modal avec Escape
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    const openModals = document.querySelectorAll('.modal[style*="flex"]');
+    openModals.forEach(modal => {
+      closeModal(modal.id);
+    });
+  }
+});
+
 // Export pour utilisation externe
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = AdminManager;
 }
+
+// =======================
+// MENU HAMBURGER - Mobile Navigation
+// =======================
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, searching for hamburger elements...');
+  
+  const hamburger = document.getElementById('adminHamburger');
+  const sidebar = document.getElementById('adminSidebar');
+
+  console.log('Hamburger found:', !!hamburger);
+  console.log('Sidebar found:', !!sidebar);
+
+  if (hamburger && sidebar) {
+    console.log('Both elements found, setting up event listeners...');
+
+    hamburger.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      console.log('Hamburger clicked!');
+      
+      const isOpen = sidebar.classList.contains('admin-sidebar-open');
+      console.log('Sidebar currently open:', isOpen);
+      
+      if (isOpen) {
+        sidebar.classList.remove('admin-sidebar-open');
+        hamburger.classList.remove('hamburger-active');
+        console.log('Sidebar closed');
+      } else {
+        sidebar.classList.add('admin-sidebar-open');
+        hamburger.classList.add('hamburger-active');
+        console.log('Sidebar opened');
+      }
+    });
+
+    // Fermer la sidebar quand on clique en dehors
+    document.addEventListener('click', function(e) {
+      if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+        sidebar.classList.remove('admin-sidebar-open');
+        hamburger.classList.remove('hamburger-active');
+      }
+    });
+
+    // Fermer avec Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        sidebar.classList.remove('admin-sidebar-open');
+        hamburger.classList.remove('hamburger-active');
+      }
+    });
+  } else {
+    console.error('Hamburger menu elements not found!');
+    console.log('Available elements with ID:', 
+      Array.from(document.querySelectorAll('[id]')).map(el => el.id)
+    );
+  }
+});
+
+// Initialiser AdminManager quand le DOM est chargé
+document.addEventListener('DOMContentLoaded', function() {
+  new AdminManager();
+});

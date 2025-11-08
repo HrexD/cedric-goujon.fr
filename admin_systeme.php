@@ -143,11 +143,17 @@ $system_logs = [
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
 
     <div class="admin-layout">
+        <!-- Hamburger Menu Button (Mobile) -->
+        <button class="admin-hamburger" id="adminHamburger" aria-label="Toggle Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
         <!-- Sidebar Navigation -->
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="user-info">
                 <strong>👤 Admin</strong>
                 <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
@@ -177,6 +183,14 @@ $system_logs = [
             <div class="admin-header">
                 <h1>⚙️ Administration Système</h1>
                 <p class="admin-subtitle">Surveillance et maintenance du système</p>
+                <div class="admin-actions">
+                    <a href="admin_logs.php" class="btn btn-primary">
+                        📊 Logs d'Upload
+                    </a>
+                    <a href="upload_debug.php" class="btn btn-outline" target="_blank">
+                        🔧 Debug Upload
+                    </a>
+                </div>
             </div>
             
             <!-- Messages -->
@@ -197,53 +211,91 @@ $system_logs = [
     <div class="system-section">
         <h3 style="margin-bottom: 1.5rem; color: var(--primary);">🛠️ Actions de maintenance</h3>
         
-        <form method="POST" class="action-buttons">
-            <button type="submit" name="action" value="clear_cache" class="action-btn btn-primary"
-                    onclick="return confirm('Vider le cache ?')">
-                🗑️ Vider le cache
-            </button>
-            <button type="submit" name="action" value="optimize_db" class="action-btn btn-warning"
-                    onclick="return confirm('Optimiser la base de données ?')">
-                🚀 Optimiser la DB
-            </button>
-            <button type="submit" name="action" value="backup_db" class="action-btn btn-success"
-                    onclick="return confirm('Créer une sauvegarde ?')">
-                💾 Sauvegarder
-            </button>
-            <button type="button" onclick="location.reload()" class="action-btn btn-primary">
-                🔄 Actualiser les infos
-            </button>
-        </form>
+        <div class="form-grid">
+            <form method="POST" class="form-group">
+                <button type="submit" name="action" value="clear_cache" class="btn btn-primary"
+                        onclick="return confirm('Vider le cache ?')">
+                    <span class="btn-icon">🗑️</span>
+                    Vider le cache
+                </button>
+            </form>
+            
+            <form method="POST" class="form-group">
+                <button type="submit" name="action" value="optimize_db" class="btn btn-warning"
+                        onclick="return confirm('Optimiser la base de données ?')">
+                    <span class="btn-icon">🚀</span>
+                    Optimiser la DB
+                </button>
+            </form>
+            
+            <form method="POST" class="form-group">
+                <button type="submit" name="action" value="backup_db" class="btn btn-success"
+                        onclick="return confirm('Créer une sauvegarde ?')">
+                    <span class="btn-icon">💾</span>
+                    Sauvegarder
+                </button>
+            </form>
+            
+            <div class="form-group">
+                <button type="button" onclick="location.reload()" class="btn btn-secondary">
+                    <span class="btn-icon">🔄</span>
+                    Actualiser les infos
+                </button>
+            </div>
+        </div>
     </div>
     
     <!-- Informations serveur -->
     <div class="system-section">
         <h3 style="margin-bottom: 1.5rem; color: var(--primary);">🖥️ Informations serveur</h3>
         
-        <div class="info-grid">
-            <div class="info-item status-good">
-                <strong>🌐 Système d'exploitation</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['server']['os'] ?></span>
+        <div class="form-grid">
+            <div class="info-card status-good">
+                <div class="info-header">
+                    <span class="info-icon">🌐</span>
+                    <strong>Système d'exploitation</strong>
+                </div>
+                <div class="info-value"><?= $system_info['server']['os'] ?></div>
             </div>
-            <div class="info-item status-good">
-                <strong>🚀 Serveur web</strong><br>
-                <span style="color: var(--text-muted);"><?= htmlspecialchars($system_info['server']['software']) ?></span>
+            
+            <div class="info-card status-good">
+                <div class="info-header">
+                    <span class="info-icon">🚀</span>
+                    <strong>Serveur web</strong>
+                </div>
+                <div class="info-value"><?= htmlspecialchars($system_info['server']['software']) ?></div>
             </div>
-            <div class="info-item status-good">
-                <strong>🐘 Version PHP</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['server']['php_version'] ?></span>
+            
+            <div class="info-card status-good">
+                <div class="info-header">
+                    <span class="info-icon">🐘</span>
+                    <strong>Version PHP</strong>
+                </div>
+                <div class="info-value"><?= $system_info['server']['php_version'] ?></div>
             </div>
-            <div class="info-item status-good">
-                <strong>🏠 Racine du site</strong><br>
-                <span style="color: var(--text-muted); font-size: 0.8em;"><?= htmlspecialchars($system_info['server']['document_root']) ?></span>
+            
+            <div class="info-card status-good">
+                <div class="info-header">
+                    <span class="info-icon">🏠</span>
+                    <strong>Racine du site</strong>
+                </div>
+                <div class="info-value" style="font-size: 0.8em; word-break: break-all;"><?= htmlspecialchars($system_info['server']['document_root']) ?></div>
             </div>
-            <div class="info-item status-good">
-                <strong>🌍 Nom du serveur</strong><br>
-                <span style="color: var(--text-muted);"><?= htmlspecialchars($system_info['server']['server_name']) ?></span>
+            
+            <div class="info-card status-good">
+                <div class="info-header">
+                    <span class="info-icon">🌍</span>
+                    <strong>Nom du serveur</strong>
+                </div>
+                <div class="info-value"><?= htmlspecialchars($system_info['server']['server_name']) ?></div>
             </div>
-            <div class="info-item status-good">
-                <strong>⏰ Dernière requête</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['server']['request_time'] ?></span>
+            
+            <div class="info-card status-good">
+                <div class="info-header">
+                    <span class="info-icon">⏰</span>
+                    <strong>Dernière requête</strong>
+                </div>
+                <div class="info-value"><?= $system_info['server']['request_time'] ?></div>
             </div>
         </div>
     </div>
@@ -252,26 +304,45 @@ $system_logs = [
     <div class="system-section">
         <h3 style="margin-bottom: 1.5rem; color: var(--primary);">🐘 Configuration PHP</h3>
         
-        <div class="info-grid">
-            <div class="info-item">
-                <strong>💾 Limite mémoire</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['php']['memory_limit'] ?></span>
+        <div class="form-grid">
+            <div class="info-card">
+                <div class="info-header">
+                    <span class="info-icon">💾</span>
+                    <strong>Limite mémoire</strong>
+                </div>
+                <div class="info-value"><?= $system_info['php']['memory_limit'] ?></div>
             </div>
-            <div class="info-item">
-                <strong>⏱️ Temps d'exécution max</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['php']['max_execution_time'] ?> secondes</span>
+            
+            <div class="info-card">
+                <div class="info-header">
+                    <span class="info-icon">⏱️</span>
+                    <strong>Temps d'exécution max</strong>
+                </div>
+                <div class="info-value"><?= $system_info['php']['max_execution_time'] ?> secondes</div>
             </div>
-            <div class="info-item">
-                <strong>📤 Taille upload max</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['php']['upload_max_filesize'] ?></span>
+            
+            <div class="info-card">
+                <div class="info-header">
+                    <span class="info-icon">📤</span>
+                    <strong>Taille upload max</strong>
+                </div>
+                <div class="info-value"><?= $system_info['php']['upload_max_filesize'] ?></div>
             </div>
-            <div class="info-item">
-                <strong>📊 Taille POST max</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['php']['post_max_size'] ?></span>
+            
+            <div class="info-card">
+                <div class="info-header">
+                    <span class="info-icon">📊</span>
+                    <strong>Taille POST max</strong>
+                </div>
+                <div class="info-value"><?= $system_info['php']['post_max_size'] ?></div>
             </div>
-            <div class="info-item">
-                <strong>🌍 Fuseau horaire</strong><br>
-                <span style="color: var(--text-muted);"><?= $system_info['php']['timezone'] ?></span>
+            
+            <div class="info-card">
+                <div class="info-header">
+                    <span class="info-icon">🌍</span>
+                    <strong>Fuseau horaire</strong>
+                </div>
+                <div class="info-value"><?= $system_info['php']['timezone'] ?></div>
             </div>
         </div>
     </div>
@@ -280,11 +351,18 @@ $system_logs = [
     <div class="system-section">
         <h3 style="margin-bottom: 1.5rem; color: var(--primary);">🔌 Extensions PHP</h3>
         
-        <div class="extension-grid">
+        <div class="form-grid">
             <?php foreach ($php_extensions as $extension => $loaded): ?>
-                <div class="extension-item <?= $loaded ? 'extension-active' : 'extension-inactive' ?>">
-                    <strong><?= strtoupper($extension) ?></strong><br>
-                    <span><?= $loaded ? '✅ Activé' : '❌ Désactivé' ?></span>
+                <div class="info-card <?= $loaded ? 'status-good' : 'status-error' ?>">
+                    <div class="info-header">
+                        <span class="info-icon"><?= $loaded ? '✅' : '❌' ?></span>
+                        <strong><?= strtoupper($extension) ?></strong>
+                    </div>
+                    <div class="info-value">
+                        <span class="status-badge <?= $loaded ? 'status-success' : 'status-danger' ?>">
+                            <?= $loaded ? 'Activé' : 'Désactivé' ?>
+                        </span>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -295,32 +373,51 @@ $system_logs = [
         <h3 style="margin-bottom: 1.5rem; color: var(--primary);">🗄️ Base de données</h3>
         
         <?php if (isset($system_info['database']['error'])): ?>
-            <div class="info-item status-error">
-                <strong>❌ Erreur de connexion</strong><br>
-                <span style="color: var(--text-muted);"><?= htmlspecialchars($system_info['database']['error']) ?></span>
+            <div class="info-card status-error">
+                <div class="info-header">
+                    <span class="info-icon">❌</span>
+                    <strong>Erreur de connexion</strong>
+                </div>
+                <div class="info-value"><?= htmlspecialchars($system_info['database']['error']) ?></div>
             </div>
         <?php else: ?>
-            <div class="info-grid">
-                <div class="info-item status-good">
-                    <strong>🔢 Version MySQL</strong><br>
-                    <span style="color: var(--text-muted);"><?= $system_info['database']['version'] ?></span>
+            <div class="form-grid">
+                <div class="info-card status-good">
+                    <div class="info-header">
+                        <span class="info-icon">🔢</span>
+                        <strong>Version MySQL</strong>
+                    </div>
+                    <div class="info-value"><?= $system_info['database']['version'] ?></div>
                 </div>
-                <div class="info-item status-good">
-                    <strong>🔤 Charset</strong><br>
-                    <span style="color: var(--text-muted);"><?= $system_info['database']['charset'] ?></span>
+                
+                <div class="info-card status-good">
+                    <div class="info-header">
+                        <span class="info-icon">🔤</span>
+                        <strong>Charset</strong>
+                    </div>
+                    <div class="info-value"><?= $system_info['database']['charset'] ?></div>
                 </div>
-                <div class="info-item status-good">
-                    <strong>📊 Nombre de tables</strong><br>
-                    <span style="color: var(--text-muted);"><?= $system_info['database']['tables'] ?> tables</span>
+                
+                <div class="info-card status-good">
+                    <div class="info-header">
+                        <span class="info-icon">📊</span>
+                        <strong>Nombre de tables</strong>
+                    </div>
+                    <div class="info-value"><?= $system_info['database']['tables'] ?> tables</div>
                 </div>
             </div>
             
-            <h4 style="margin: 2rem 0 1rem 0;">📈 Statistiques des tables</h4>
-            <div class="info-grid">
+            <h4 style="margin: 2rem 0 1rem 0; color: var(--primary);">📈 Statistiques des tables</h4>
+            <div class="form-grid">
                 <?php foreach ($table_stats as $table => $count): ?>
-                    <div class="info-item">
-                        <strong><?= ucfirst(str_replace('_', ' ', $table)) ?></strong><br>
-                        <span style="color: var(--text-muted);"><?= $count ?> enregistrement(s)</span>
+                    <div class="info-card">
+                        <div class="info-header">
+                            <span class="info-icon">🗂️</span>
+                            <strong><?= ucfirst(str_replace('_', ' ', $table)) ?></strong>
+                        </div>
+                        <div class="info-value">
+                            <span class="status-badge status-success"><?= $count ?> enregistrement(s)</span>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -332,25 +429,42 @@ $system_logs = [
         <div class="system-section">
             <h3 style="margin-bottom: 1.5rem; color: var(--primary);">💾 Espace disque</h3>
             
-            <div class="info-grid">
-                <div class="info-item">
-                    <strong>📊 Espace total</strong><br>
-                    <span style="color: var(--text-muted);"><?= $system_info['disk']['total'] ?> GB</span>
-                </div>
-                <div class="info-item">
-                    <strong>💽 Espace utilisé</strong><br>
-                    <span style="color: var(--text-muted);"><?= $system_info['disk']['used'] ?> GB</span>
-                </div>
-                <div class="info-item">
-                    <strong>🆓 Espace libre</strong><br>
-                    <span style="color: var(--text-muted);"><?= $system_info['disk']['free'] ?> GB</span>
-                </div>
-                <div class="info-item">
-                    <strong>📈 Utilisation</strong><br>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: <?= $system_info['disk']['usage_percent'] ?>%"></div>
+            <div class="form-grid">
+                <div class="info-card">
+                    <div class="info-header">
+                        <span class="info-icon">📊</span>
+                        <strong>Espace total</strong>
                     </div>
-                    <span style="color: var(--text-muted);"><?= $system_info['disk']['usage_percent'] ?>% utilisé</span>
+                    <div class="info-value"><?= $system_info['disk']['total'] ?> GB</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-header">
+                        <span class="info-icon">💽</span>
+                        <strong>Espace utilisé</strong>
+                    </div>
+                    <div class="info-value"><?= $system_info['disk']['used'] ?> GB</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-header">
+                        <span class="info-icon">🆓</span>
+                        <strong>Espace libre</strong>
+                    </div>
+                    <div class="info-value"><?= $system_info['disk']['free'] ?> GB</div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-header">
+                        <span class="info-icon">📈</span>
+                        <strong>Utilisation</strong>
+                    </div>
+                    <div class="info-value">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: <?= $system_info['disk']['usage_percent'] ?>%"></div>
+                        </div>
+                        <span style="margin-top: var(--spacing-xs); display: block;"><?= $system_info['disk']['usage_percent'] ?>% utilisé</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -368,6 +482,10 @@ $system_logs = [
                     <span><?= htmlspecialchars($log['message']) ?></span>
                 </div>
             <?php endforeach; ?>
+        </div>
+        
+        <div style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--gray-100); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--text-muted);">
+            💡 <strong>Astuce :</strong> Les logs sont actualisés automatiquement toutes les 30 secondes. Les vrais logs système seraient stockés dans des fichiers sur le serveur.
         </div>
     </div>
     

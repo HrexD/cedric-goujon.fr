@@ -94,7 +94,14 @@ function showError(message) {
     errorDiv = document.createElement('div');
     errorDiv.id = 'errorMessages';
     errorDiv.className = 'error-message';
-    dropzone.parentNode.insertBefore(errorDiv, dropzone);
+    
+    // Vérifier que dropzone et son parent existent
+    if (dropzone && dropzone.parentNode) {
+      dropzone.parentNode.insertBefore(errorDiv, dropzone);
+    } else {
+      console.warn('Dropzone ou son parent non trouvé, ajout de l\'erreur au body');
+      document.body.appendChild(errorDiv);
+    }
   }
   
   errorDiv.innerHTML = message;

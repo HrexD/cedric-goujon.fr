@@ -33,7 +33,6 @@ $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
     <link rel="icon" type="image/x-icon" href="../favicon.png">
 </head>
 <body>
-    <button id="theme-toggle" aria-label="Basculer thème">☀️</button>
     
     <!-- Navigation -->
     <?= generateNavigation('candidatures/index') ?>

@@ -30,7 +30,6 @@ if (!isset($_SESSION['admin_logged']) || $_SESSION['admin_logged'] !== true) {
             <link rel="icon" type="image/x-icon" href="favicon.png">
         </head>
         <body class="admin-page">
-            <button id="theme-toggle" aria-label="Basculer thème" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--surface); border: 2px solid var(--border-color); border-radius: 50%; width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer; transition: all var(--transition-normal);">☀️</button>
             
             <div class="login-container">
                 <h1>🔐 Administration</h1>
@@ -146,11 +145,17 @@ $system_info = [
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--surface); border: 2px solid var(--border-color); border-radius: 50%; width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer; transition: all var(--transition-normal);">☀️</button>
     
     <div class="admin-layout">
+        <!-- Hamburger Menu Button (Mobile) -->
+        <button class="admin-hamburger" id="adminHamburger" aria-label="Toggle Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
         <!-- Sidebar -->
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="user-info">
                 <strong>👤 Admin</strong>
                 <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
@@ -288,6 +293,9 @@ $system_info = [
                         <a href="upload.php" class="btn btn-primary">
                             📤 Uploader des fichiers
                         </a>
+                        <a href="admin_exercices.php" class="btn btn-primary">
+                            📚 Gérer les exercices
+                        </a>
                         <a href="admin_messages" class="btn btn-secondary">
                             📧 Gérer les messages
                         </a>
@@ -315,6 +323,34 @@ $system_info = [
         </main>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('adminHamburger');
+            const sidebar = document.getElementById('adminSidebar');
+            
+            if (hamburger && sidebar) {
+                hamburger.addEventListener('click', function() {
+                    hamburger.classList.toggle('active');
+                    sidebar.classList.toggle('active');
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!hamburger.contains(e.target) && !sidebar.contains(e.target)) {
+                        hamburger.classList.remove('active');
+                        sidebar.classList.remove('active');
+                    }
+                });
+                
+                const menuLinks = sidebar.querySelectorAll('a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        sidebar.classList.remove('active');
+                    });
+                });
+            }
+        });
+    </script>
     <script src="admin-modern.js"></script>
 </body>
 </html>

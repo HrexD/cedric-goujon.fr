@@ -71,8 +71,15 @@ function formatFileSize($bytes) {
 </head>
 <body class="admin-page">
   <div class="admin-layout">
+    <!-- Hamburger Menu Button (Mobile) -->
+    <button class="admin-hamburger" id="adminHamburger" aria-label="Toggle Menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+    
     <!-- Sidebar -->
-    <aside class="admin-sidebar">
+    <aside class="admin-sidebar" id="adminSidebar">
         <div class="user-info">
             <strong>👤 Admin</strong>
             <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
@@ -108,9 +115,14 @@ function formatFileSize($bytes) {
               <h1 class="gallery-title">🖼️ Galerie — fichiers uploadés</h1>
               <p>Liste et gestion des images et vidéos déposées via l'interface.</p>
             </div>
-            <a href="upload.php" style="background: var(--success-color); color: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-sm); text-decoration: none; font-weight: 600; transition: all var(--transition-fast);">
-              📤 Uploader des fichiers
-            </a>
+            <div style="display: flex; gap: 1rem;">
+              <a href="admin_logs.php" style="background: var(--primary-color); color: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-sm); text-decoration: none; font-weight: 600; transition: all var(--transition-fast);">
+                📊 Logs d'upload
+              </a>
+              <a href="upload.php" style="background: var(--success-color); color: white; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-sm); text-decoration: none; font-weight: 600; transition: all var(--transition-fast);">
+                📤 Uploader des fichiers
+              </a>
+            </div>
           </div>
         </div>
 

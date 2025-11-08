@@ -72,13 +72,19 @@ try {
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
 
     <div class="admin-layout">
+        <!-- Hamburger Menu Button (Mobile) -->
+        <button class="admin-hamburger" id="adminHamburger" aria-label="Toggle Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
         <!-- Sidebar Navigation -->
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="user-info">
-                <strong>� Admin</strong>
+                <strong>👤 Admin</strong>
                 <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
                     Interface d'administration
                 </div>
@@ -227,6 +233,34 @@ try {
         </main>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('adminHamburger');
+            const sidebar = document.getElementById('adminSidebar');
+            
+            if (hamburger && sidebar) {
+                hamburger.addEventListener('click', function() {
+                    hamburger.classList.toggle('active');
+                    sidebar.classList.toggle('active');
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!hamburger.contains(e.target) && !sidebar.contains(e.target)) {
+                        hamburger.classList.remove('active');
+                        sidebar.classList.remove('active');
+                    }
+                });
+                
+                const menuLinks = sidebar.querySelectorAll('a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburger.classList.remove('active');
+                        sidebar.classList.remove('active');
+                    });
+                });
+            }
+        });
+    </script>
     <script src="admin-modern.js"></script>
 </body>
 </html>

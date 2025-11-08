@@ -35,7 +35,7 @@ function lastLines($file, $lines = 20) {
     return array_reverse($result);
 }
 
-$uploadLog = __DIR__ . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'upload_log.csv';
+$uploadLog = __DIR__ . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'upload_log.csv';
 
 ?>
 <!doctype html>
@@ -58,7 +58,7 @@ $uploadLog = __DIR__ . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . '
 
   <h2 style="margin-top:18px">Derniers uploads (log)</h2>
   <?php if (!file_exists($uploadLog)): ?>
-    <div>Aucun log trouvé dans <code>uploads/upload_log.csv</code></div>
+    <div>Aucun log trouvé dans <code>logs/upload_log.csv</code></div>
   <?php else: ?>
     <pre><?php
       $lines = lastLines($uploadLog, 30);

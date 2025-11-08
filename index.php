@@ -105,7 +105,10 @@ $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
               <h4>Développement</h4>
               <div class="skill-tags">
                 <span class="skill-tag">PHP</span>
+                <span class="skill-tag">Symfony</span>
                 <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">React JS</span>
+                <span class="skill-tag">Angular JS</span>
                 <span class="skill-tag">HTML5</span>
                 <span class="skill-tag">CSS3</span>
                 <span class="skill-tag">Frameworks récents</span>
@@ -124,9 +127,13 @@ $user = $pdo->query("SELECT * FROM utilisateur_principal LIMIT 1")->fetch();
               <h4>Outils</h4>
               <div class="skill-tags">
                 <span class="skill-tag">Git</span>
+                <span class="skill-tag">GitHub</span>
+                <span class="skill-tag">GitLab</span>
+                <span class="skill-tag">Docker</span>
                 <span class="skill-tag">Gestion de projets</span>
                 <span class="skill-tag">Veille technologique</span>
-                <span class="skill-tag">Outils modernes</span>
+                <span class="skill-tag">PHP Storm</span>
+                <span class="skill-tag">Visual Studio Code</span>
               </div>
             </div>
           </div>

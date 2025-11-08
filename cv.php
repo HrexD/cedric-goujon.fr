@@ -402,7 +402,7 @@ foreach ($technos as $t) {
         // Fonction d'impression optimisée
         function optimizedPrint() {
             // Masquer temporairement les éléments non nécessaires pour l'impression
-            const elementsToHide = document.querySelectorAll('nav, #theme-toggle, .hero-actions');
+            const elementsToHide = document.querySelectorAll('nav, .hero-actions');
             elementsToHide.forEach(el => el.style.display = 'none');
             
             // Lancer l'impression

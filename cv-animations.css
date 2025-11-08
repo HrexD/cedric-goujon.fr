@@ -358,3 +358,28 @@
         background: var(--text-dark);
     }
 }
+
+/* Responsive animations */
+@media (max-width: 768px) {
+    .fade-in, .slide-in, .scale-in {
+        animation-duration: 0.3s; /* Animations plus rapides sur mobile */
+    }
+    
+    .hover-animations:hover {
+        transform: scale(1.02); /* Effets plus subtils */
+    }
+    
+    .parallax {
+        transform: none; /* Désactive parallax sur mobile pour les performances */
+    }
+}
+
+@media (max-width: 480px) {
+    .fade-in, .slide-in, .scale-in {
+        animation-duration: 0.2s;
+    }
+    
+    .hover-animations:hover {
+        transform: none; /* Pas d'animations hover sur très petit écran */
+    }
+}

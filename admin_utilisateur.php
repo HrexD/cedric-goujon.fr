@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($action) {
         case 'update_profile':
             $nom = sanitize_input($_POST['nom'] ?? '');
-            $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
+            $email = filter_var(trim($_POST['email_pro'] ?? ''), FILTER_VALIDATE_EMAIL);
             $telephone = sanitize_input($_POST['telephone'] ?? '');
             $adresse = sanitize_input($_POST['adresse'] ?? '');
             $github = sanitize_input($_POST['github'] ?? '');
@@ -105,11 +105,17 @@ try {
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
 <body class="admin-page">
-    <button id="theme-toggle" aria-label="Basculer thème" class="theme-toggle">☀️</button>
 
     <div class="admin-layout">
+        <!-- Hamburger Menu Button (Mobile) -->
+        <button class="admin-hamburger" id="adminHamburger" aria-label="Toggle Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
         <!-- Sidebar Navigation -->
-        <aside class="admin-sidebar">
+        <aside class="admin-sidebar" id="adminSidebar">
             <div class="user-info">
                 <strong>👤 Admin</strong>
                 <div style="font-size: 0.8em; opacity: 0.8; margin-top: 0.5rem;">
@@ -178,28 +184,30 @@ try {
     <!-- Informations principales -->
     <div class="profile-section">
         <div class="profile-header">
-            <div class="profile-avatar">
+            <!-- <div class="profile-avatar">
                 <?= strtoupper(substr($user['nom'] ?? 'CG', 0, 2)) ?>
-            </div>
+            </div> -->
             <div>
                 <h2 style="margin: 0;"><?= htmlspecialchars($user['nom'] ?? 'Nom non défini') ?></h2>
                 <p style="color: var(--text-muted); margin: 0.5rem 0;">
-                    📧 <?= htmlspecialchars($user['email'] ?? 'Email non défini') ?>
+                    📧 <?= htmlspecialchars($user['email_pro'] ?? 'Email non défini') ?>
                 </p>
                 <p style="color: var(--text-muted); margin: 0;">
                     📞 <?= htmlspecialchars($user['telephone'] ?? 'Téléphone non défini') ?>
                 </p>
-                <div style="margin-top: 1rem;">
+                <div style="margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
                     <?php if ($user['github'] ?? ''): ?>
                         <a href="<?= htmlspecialchars($user['github']) ?>" target="_blank" 
-                           class="btn-small" style="background: #333; margin-right: 0.5rem;">
-                            📂 GitHub
+                           class="btn btn-secondary" style="background: linear-gradient(135deg, #24292e, #586069); color: white; border: none; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; padding: 0.6rem 1rem;">
+                            <span style="font-size: 1.1em;">�</span>
+                            GitHub
                         </a>
                     <?php endif; ?>
                     <?php if ($user['linkedin'] ?? ''): ?>
                         <a href="<?= htmlspecialchars($user['linkedin']) ?>" target="_blank" 
-                           class="btn-small" style="background: #0077b5;">
-                            💼 LinkedIn
+                           class="btn btn-secondary" style="background: linear-gradient(135deg, #0077b5, #005885); color: white; border: none; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; padding: 0.6rem 1rem;">
+                            <span style="font-size: 1.1em;">💼</span>
+                            LinkedIn
                         </a>
                     <?php endif; ?>
                 </div>
@@ -208,53 +216,120 @@ try {
         
         <h3 style="margin-bottom: 1.5rem; color: var(--primary);">📝 Modifier les informations</h3>
         
-        <form method="POST" class="profile-form">
+        <form method="POST" class="modal-form">
             <input type="hidden" name="action" value="update_profile">
             
-            <div class="form-group">
-                <label>👤 Nom complet *</label>
-                <input type="text" name="nom" value="<?= htmlspecialchars($user['nom'] ?? '') ?>" required>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nom" class="form-label">
+                        <span class="label-icon">👤</span>
+                        Nom complet *
+                    </label>
+                    <input type="text" 
+                           id="nom"
+                           name="nom" 
+                           class="form-input"
+                           value="<?= htmlspecialchars($user['nom'] ?? '') ?>" 
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <span class="label-icon">📧</span>
+                        Email *
+                    </label>
+                    <input type="email" 
+                           id="email"
+                           name="email" 
+                           class="form-input"
+                           value="<?= htmlspecialchars($user['email_pro'] ?? '') ?>" 
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telephone" class="form-label">
+                        <span class="label-icon">📞</span>
+                        Téléphone
+                    </label>
+                    <input type="tel" 
+                           id="telephone"
+                           name="telephone" 
+                           class="form-input"
+                           value="<?= htmlspecialchars($user['telephone'] ?? '') ?>">
+                </div>
+                
+                <div class="form-group">
+                    <label for="adresse" class="form-label">
+                        <span class="label-icon">📍</span>
+                        Adresse
+                    </label>
+                    <input type="text" 
+                           id="adresse"
+                           name="adresse" 
+                           class="form-input"
+                           value="<?= htmlspecialchars($user['adresse'] ?? '') ?>">
+                </div>
+                
+                <div class="form-group">
+                    <label for="github" class="form-label">
+                        <span class="label-icon">📂</span>
+                        GitHub
+                    </label>
+                    <input type="url" 
+                           id="github"
+                           name="github" 
+                           class="form-input"
+                           value="<?= htmlspecialchars($user['github'] ?? '') ?>" 
+                           placeholder="https://github.com/username">
+                    <small class="form-help">Lien vers votre profil GitHub</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="linkedin" class="form-label">
+                        <span class="label-icon">💼</span>
+                        LinkedIn
+                    </label>
+                    <input type="url" 
+                           id="linkedin"
+                           name="linkedin" 
+                           class="form-input"
+                           value="<?= htmlspecialchars($user['linkedin'] ?? '') ?>" 
+                           placeholder="https://linkedin.com/in/username">
+                    <small class="form-help">Lien vers votre profil LinkedIn</small>
+                </div>
+                
+                <div class="form-group form-group-full">
+                    <label for="bio" class="form-label">
+                        <span class="label-icon">📝</span>
+                        Biographie
+                    </label>
+                    <textarea id="bio"
+                              name="bio" 
+                              class="form-textarea"
+                              rows="4" 
+                              placeholder="Présentez-vous en quelques lignes..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                    <small class="form-help">Description qui apparaîtra sur votre portfolio</small>
+                </div>
+                
+                <div class="form-group form-group-full">
+                    <label for="competences" class="form-label">
+                        <span class="label-icon">🛠️</span>
+                        Compétences principales
+                    </label>
+                    <textarea id="competences"
+                              name="competences" 
+                              class="form-textarea"
+                              rows="3" 
+                              placeholder="PHP, JavaScript, React, etc. (séparées par des virgules)"><?= htmlspecialchars($user['competences'] ?? '') ?></textarea>
+                    <small class="form-help">Listez vos compétences principales séparées par des virgules</small>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label>📧 Email *</label>
-                <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required>
-            </div>
-            
-            <div class="form-group">
-                <label>📞 Téléphone</label>
-                <input type="tel" name="telephone" value="<?= htmlspecialchars($user['telephone'] ?? '') ?>">
-            </div>
-            
-            <div class="form-group">
-                <label>📍 Adresse</label>
-                <input type="text" name="adresse" value="<?= htmlspecialchars($user['adresse'] ?? '') ?>">
-            </div>
-            
-            <div class="form-group">
-                <label>📂 GitHub</label>
-                <input type="url" name="github" value="<?= htmlspecialchars($user['github'] ?? '') ?>" 
-                       placeholder="https://github.com/username">
-            </div>
-            
-            <div class="form-group">
-                <label>💼 LinkedIn</label>
-                <input type="url" name="linkedin" value="<?= htmlspecialchars($user['linkedin'] ?? '') ?>" 
-                       placeholder="https://linkedin.com/in/username">
-            </div>
-            
-            <div class="form-group full-width">
-                <label>📝 Biographie</label>
-                <textarea name="bio" rows="4" placeholder="Présentez-vous en quelques lignes..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
-            </div>
-            
-            <div class="form-group full-width">
-                <label>🛠️ Compétences principales</label>
-                <textarea name="competences" rows="3" placeholder="PHP, JavaScript, React, etc. (séparées par des virgules)"><?= htmlspecialchars($user['competences'] ?? '') ?></textarea>
-            </div>
-            
-            <div class="form-group full-width" style="text-align: right;">
-                <button type="submit" class="cta">✅ Mettre à jour le profil</button>
+            <div class="form-actions" style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <button type="submit" class="btn btn-primary">
+                    <span class="btn-icon">✅</span>
+                    Mettre à jour le profil
+                </button>
             </div>
         </form>
     </div>
@@ -262,44 +337,79 @@ try {
     <!-- Sécurité -->
     <div class="profile-section">
         <div class="security-section">
-            <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                🔒 Sécurité
-                <span style="font-size: 0.8em; background: rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 15px;">
-                    Zone sensible
-                </span>
-            </h3>
-            
-            <form method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <input type="hidden" name="action" value="update_password">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
                 
-                <div class="form-group">
-                    <label style="color: white;">🔑 Ancien mot de passe</label>
-                    <input type="password" name="old_password" required 
-                           style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white;">
+                <h3 style="margin: 0 0 1.5rem 0; display: flex; align-items: center; gap: 0.5rem; color: white; font-size: var(--font-size-xl);">
+                    �️ Sécurité du compte
+                    <span style="font-size: 0.7em; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.3rem 0.8rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);">
+                        Accès administrateur
+                    </span>
+                </h3>
+                
+                <form method="POST" class="modal-form" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: var(--radius-md); padding: var(--spacing-xl); box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    <input type="hidden" name="action" value="update_password">
+                    
+                    <div style="display: flex; flex-direction: column; gap: 2rem;">
+                        <div class="form-group">
+                            <label for="old_password" class="form-label">
+                                <span class="label-icon">�️</span>
+                                Mot de passe actuel
+                            </label>
+                            <input type="password" 
+                                   id="old_password"
+                                   name="old_password" 
+                                   class="form-input"
+                                   required
+                                   placeholder="Saisissez votre mot de passe actuel"
+                                   style="margin-top: 0.5rem;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new_password" class="form-label">
+                                <span class="label-icon">🔐</span>
+                                Nouveau mot de passe
+                            </label>
+                            <input type="password" 
+                                   id="new_password"
+                                   name="new_password" 
+                                   class="form-input"
+                                   required 
+                                   minlength="6"
+                                   placeholder="Minimum 6 caractères"
+                                   style="margin-top: 0.5rem;">
+                            <small class="form-help" style="margin-top: 0.5rem; display: block;">Utilisez un mot de passe fort et unique</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_password" class="form-label">
+                                <span class="label-icon">✅</span>
+                                Confirmer le nouveau mot de passe
+                            </label>
+                            <input type="password" 
+                                   id="confirm_password"
+                                   name="confirm_password" 
+                                   class="form-input"
+                                   required 
+                                   minlength="6"
+                                   placeholder="Répétez le nouveau mot de passe"
+                                   style="margin-top: 0.5rem;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions" style="margin-top: 2.5rem;">
+                        <button type="submit" class="btn" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; font-weight: 600; width: 100%; padding: 1rem;">
+                            <span class="btn-icon">🔄</span>
+                            Mettre à jour le mot de passe
+                        </button>
+                    </div>
+                </form>
+                
+                <div style="margin-top: 1.5rem; padding: var(--spacing-md); background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: var(--radius-md); color: white; font-size: 0.9em; border: 1px solid rgba(255,255,255,0.2);">
+                    💡 <strong>Conseil :</strong> Après modification, n'oubliez pas de mettre à jour le fichier 
+                    <code style="background: rgba(0,0,0,0.2); padding: 0.2rem 0.5rem; border-radius: 4px; color: #ffd700;">admin.php</code> 
+                    avec votre nouveau mot de passe.
                 </div>
                 
-                <div class="form-group">
-                    <label style="color: white;">🆕 Nouveau mot de passe</label>
-                    <input type="password" name="new_password" required minlength="6"
-                           style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white;">
-                </div>
-                
-                <div class="form-group">
-                    <label style="color: white;">🔄 Confirmer le mot de passe</label>
-                    <input type="password" name="confirm_password" required minlength="6"
-                           style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white;">
-                </div>
-                
-                <div class="form-group" style="display: flex; align-items: end;">
-                    <button type="submit" class="btn-small" style="background: white; color: #dc3545; font-weight: bold;">
-                        🔐 Changer le mot de passe
-                    </button>
-                </div>
-            </form>
-            
-            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.9em; opacity: 0.8;">
-                ⚠️ <strong>Important :</strong> Après changement du mot de passe, pensez à mettre à jour le fichier <code>admin.php</code> 
-                avec le nouveau mot de passe.
             </div>
         </div>
     </div>
@@ -358,5 +468,87 @@ try {
     </div>
 
     <script src="admin-modern.js"></script>
+    <script>
+        // Validation pour le formulaire utilisateur
+        document.addEventListener('DOMContentLoaded', function() {
+            // Validation URL en temps réel
+            const urlFields = ['github', 'linkedin'];
+            urlFields.forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                if (field) {
+                    field.addEventListener('blur', function() {
+                        const value = this.value.trim();
+                        const formGroup = this.closest('.form-group');
+                        
+                        if (value && !isValidUrl(value)) {
+                            formGroup.classList.add('error');
+                            addFieldError(formGroup, 'URL invalide');
+                        } else {
+                            formGroup.classList.remove('error');
+                            removeFieldError(formGroup);
+                        }
+                    });
+                }
+            });
+            
+            // Validation confirmation mot de passe
+            const newPassword = document.getElementById('new_password');
+            const confirmPassword = document.getElementById('confirm_password');
+            
+            if (newPassword && confirmPassword) {
+                confirmPassword.addEventListener('input', function() {
+                    const formGroup = this.closest('.form-group');
+                    
+                    if (this.value !== newPassword.value) {
+                        formGroup.classList.add('error');
+                        addFieldError(formGroup, 'Les mots de passe ne correspondent pas');
+                    } else {
+                        formGroup.classList.remove('error');
+                        removeFieldError(formGroup);
+                    }
+                });
+            }
+            
+            // Validation force du mot de passe
+            if (newPassword) {
+                newPassword.addEventListener('input', function() {
+                    const formGroup = this.closest('.form-group');
+                    const value = this.value;
+                    
+                    if (value.length < 6) {
+                        formGroup.classList.add('error');
+                        addFieldError(formGroup, 'Le mot de passe doit contenir au moins 6 caractères');
+                    } else {
+                        formGroup.classList.add('success');
+                        removeFieldError(formGroup);
+                    }
+                });
+            }
+        });
+        
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+        
+        function addFieldError(formGroup, message) {
+            removeFieldError(formGroup);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'form-error';
+            errorDiv.textContent = message;
+            formGroup.appendChild(errorDiv);
+        }
+        
+        function removeFieldError(formGroup) {
+            const errorDiv = formGroup.querySelector('.form-error');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -30,6 +30,8 @@ function generateNavigation(string $currentPage = ''): string {
             '../index' => 'Accueil',
             '../cv' => 'Mon CV', 
             '../projets' => 'Mes Projets',
+            '../cours' => 'Cours',
+            '../exercices' => 'Exercices',
             '../contact' => 'Contact'
         ];
         
@@ -46,6 +48,8 @@ function generateNavigation(string $currentPage = ''): string {
             'index' => 'Accueil',
             'cv' => 'Mon CV', 
             'projets' => 'Mes Projets',
+            'cours' => 'Cours',
+            'exercices' => 'Exercices',
             'contact' => 'Contact'
         ];
         
@@ -59,6 +63,17 @@ function generateNavigation(string $currentPage = ''): string {
     }
     
     $nav = '<nav>' . PHP_EOL;
+    
+    // Bouton hamburger pour mobile
+    $nav .= '    <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">' . PHP_EOL;
+    $nav .= '        <span></span>' . PHP_EOL;
+    $nav .= '        <span></span>' . PHP_EOL;
+    $nav .= '        <span></span>' . PHP_EOL;
+    $nav .= '    </button>' . PHP_EOL;
+    
+    // Container des liens de navigation
+    $nav .= '    <div class="nav-links">' . PHP_EOL;
+    
     $items = [];
     
     foreach ($navItems as $path => $label) {
@@ -81,11 +96,44 @@ function generateNavigation(string $currentPage = ''): string {
             $class = ' class="candidatures-link"';
         }
         
-        $items[] = "    <a href=\"{$path}\"{$activeAttr}{$class}>{$label}</a>";
+        $items[] = "        <a href=\"{$path}\"{$activeAttr}{$class}>{$label}</a>";
     }
     
-    $nav .= implode(' |' . PHP_EOL, $items) . PHP_EOL;
-    $nav .= '</nav>';
+    $nav .= implode(PHP_EOL, $items) . PHP_EOL;
+    $nav .= '    </div>' . PHP_EOL;
+    $nav .= '</nav>' . PHP_EOL;
+    
+    // Ajouter le script JavaScript pour le menu mobile
+    $nav .= '<script>' . PHP_EOL;
+    $nav .= 'function toggleNav() {' . PHP_EOL;
+    $nav .= '    const navLinks = document.querySelector(\'.nav-links\');' . PHP_EOL;
+    $nav .= '    const navToggle = document.querySelector(\'.nav-toggle\');' . PHP_EOL;
+    $nav .= '    navLinks.classList.toggle(\'active\');' . PHP_EOL;
+    $nav .= '    navToggle.classList.toggle(\'active\');' . PHP_EOL;
+    $nav .= '}' . PHP_EOL;
+    $nav .= '' . PHP_EOL;
+    $nav .= '// Fermer le menu si on clique en dehors' . PHP_EOL;
+    $nav .= 'document.addEventListener(\'click\', function(event) {' . PHP_EOL;
+    $nav .= '    const nav = document.querySelector(\'nav\');' . PHP_EOL;
+    $nav .= '    const navLinks = document.querySelector(\'.nav-links\');' . PHP_EOL;
+    $nav .= '    const navToggle = document.querySelector(\'.nav-toggle\');' . PHP_EOL;
+    $nav .= '    ' . PHP_EOL;
+    $nav .= '    if (!nav.contains(event.target) && navLinks.classList.contains(\'active\')) {' . PHP_EOL;
+    $nav .= '        navLinks.classList.remove(\'active\');' . PHP_EOL;
+    $nav .= '        navToggle.classList.remove(\'active\');' . PHP_EOL;
+    $nav .= '    }' . PHP_EOL;
+    $nav .= '});' . PHP_EOL;
+    $nav .= '' . PHP_EOL;
+    $nav .= '// Fermer le menu si on clique sur un lien' . PHP_EOL;
+    $nav .= 'document.querySelectorAll(\'.nav-links a\').forEach(link => {' . PHP_EOL;
+    $nav .= '    link.addEventListener(\'click\', function() {' . PHP_EOL;
+    $nav .= '        const navLinks = document.querySelector(\'.nav-links\');' . PHP_EOL;
+    $nav .= '        const navToggle = document.querySelector(\'.nav-toggle\');' . PHP_EOL;
+    $nav .= '        navLinks.classList.remove(\'active\');' . PHP_EOL;
+    $nav .= '        navToggle.classList.remove(\'active\');' . PHP_EOL;
+    $nav .= '    });' . PHP_EOL;
+    $nav .= '});' . PHP_EOL;
+    $nav .= '</script>' . PHP_EOL;
     
     return $nav;
 }
