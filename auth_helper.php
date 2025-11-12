@@ -31,6 +31,7 @@ function generateNavigation(string $currentPage = ''): string {
             '../cv' => 'Mon CV', 
             '../projets' => 'Mes Projets',
             '../exercices' => 'Exercices',
+            '../cours' => 'Cours',
             '../contact' => 'Contact'
         ];
         
@@ -48,6 +49,7 @@ function generateNavigation(string $currentPage = ''): string {
             'cv' => 'Mon CV', 
             'projets' => 'Mes Projets',
             'exercices' => 'Exercices',
+            'cours' => 'Cours',
             'contact' => 'Contact'
         ];
         

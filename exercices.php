@@ -140,6 +140,23 @@ function getLangageIcon($langage) {
             </div>
         </section>
 
+        <!-- Message important sur les prérequis -->
+        <section class="cv-section">
+            <div class="learning-notice">
+                <div class="notice-content">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div class="notice-text">
+                        <h3>📚 Conseil pédagogique</h3>
+                        <p>Avant de vous lancer dans les exercices, nous vous recommandons fortement de <strong>suivre nos cours théoriques</strong>. Ils vous donneront les bases solides nécessaires pour réussir ces défis pratiques.</p>
+                    </div>
+                    <a href="cours.php" class="notice-btn">
+                        <i class="fas fa-book"></i>
+                        Voir les cours
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- Filtres et Recherche -->
         <section class="cv-section">
                 <div class="advanced-filters">
