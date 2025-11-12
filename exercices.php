@@ -125,7 +125,6 @@ function getLangageIcon($langage) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="cv-modern.css">
     <link rel="stylesheet" href="cv-animations.css">
-    <link rel="stylesheet" href="cours-styles.css">
     <link rel="stylesheet" href="exercices-styles.css">
     <link rel="icon" type="image/x-icon" href="favicon.png">
 </head>
@@ -141,32 +140,8 @@ function getLangageIcon($langage) {
             </div>
         </section>
 
-        <!-- Promo Cours Section -->
-        <section class="cv-section cours-promo-section fade-in">
-            <div class="cours-promo-card">
-                <div class="cours-promo-content">
-                    <div class="cours-promo-icon">📚</div>
-                    <h3>Besoin d'apprendre les bases ?</h3>
-                    <p>Commencez par nos cours structurés pour maîtriser les fondamentaux avant de vous lancer dans les exercices pratiques.</p>
-                    <a href="cours.php" class="btn-modern btn-primary">
-                        <span class="btn-icon">🎓</span>
-                        Découvrir les cours
-                    </a>
-                </div>
-                <div class="cours-promo-visual">
-                    <div class="learning-path">
-                        <div class="step">📖 Apprendre</div>
-                        <div class="arrow">→</div>
-                        <div class="step">💪 Pratiquer</div>
-                        <div class="arrow">→</div>
-                        <div class="step">🏆 Maîtriser</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-            <!-- Filtres et Recherche -->
-            <section class="cv-section">
+        <!-- Filtres et Recherche -->
+        <section class="cv-section">
                 <div class="advanced-filters">
                     <!-- Recherche principale -->
                     <div class="search-container">
