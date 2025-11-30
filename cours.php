@@ -85,6 +85,7 @@ $niveaux = $niveaux_ordonnes;
     <link rel="stylesheet" href="cv-modern.css">
     <link rel="stylesheet" href="cv-animations.css">
     <link rel="stylesheet" href="exercices-styles.css">
+    <link rel="stylesheet" href="cours-styles.css">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body class="cv-page">
@@ -137,7 +138,7 @@ $niveaux = $niveaux_ordonnes;
                     <!-- Langages/Technologies -->
                     <div class="filter-group">
                         <h3 class="filter-group-title">
-                            <span class="filter-icon">�</span>
+                            <span class="filter-icon">🖥️</span>
                             Technologies
                         </h3>
                         <div class="filter-tags">
@@ -230,9 +231,9 @@ $niveaux = $niveaux_ordonnes;
                             </div>
                             
                             <div class="exercice-footer">
-                                <div class="exercice-stats">
+                                <!-- <div class="exercice-stats">
                                     <span>📅 <?= date("d/m/Y", strtotime($cours['date_creation'])) ?></span>
-                                </div>
+                                </div> -->
                                 <button class="btn-exercice">Voir le cours</button>
                             </div>
                         </div>

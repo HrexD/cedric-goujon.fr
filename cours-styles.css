@@ -1,0 +1,478 @@
+/* === STYLES POUR LES COURS ===
+   Améliore l'affichage du contenu des sections de cours */
+
+/* Styles généraux pour les sections */
+.cours-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Titres de section */
+/* .section-title,
+h3 {
+    color: #2c3e50;
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 25px 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #3498db;
+    position: relative;
+}
+
+ .section-title::before,
+h3::before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background-color: #e74c3c;
+}  */
+
+/* Sous-titres */
+.subsection-title,
+h4 {
+    color: #34495e;
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 20px 0 10px 0;
+    padding-left: 15px;
+    border-left: 4px solid #3498db;
+}
+
+/* Paragraphes */
+p {
+    margin: 12px 0;
+    text-align: justify;
+}
+
+/* Blocs de code - Style amélioré */
+.code-block,
+pre,
+pre code {
+    font-family: 'Fira Code', 'Monaco', 'Consolas', 'Courier New', monospace !important;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 20px 0;
+    position: relative;
+}
+
+/* Container principal pour les blocs de code */
+pre {
+    background: #1e1e1e;
+    border: 1px solid #404040;
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+/* Code à l'intérieur des pre */
+pre code {
+    display: block;
+    padding: 20px;
+    color: #d4d4d4;
+    background: none;
+    border: none;
+    margin: 0;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
+
+/* Code inline */
+.inline-code,
+code:not(pre code) {
+    background: #f1f1f1;
+    color: #d63384;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9em;
+    border: 1px solid #ddd;
+}
+
+/* Styles spécifiques par langage */
+.language-javascript {
+    background: #1e1e1e;
+    position: relative;
+}
+
+.language-javascript::before {
+    content: "JavaScript";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #f7df1e;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.language-python {
+    background: #1e1e1e;
+    position: relative;
+}
+
+.language-python::before {
+    content: "Python";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #3776ab;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.language-php {
+    background: #1e1e1e;
+    position: relative;
+}
+
+.language-php::before {
+    content: "PHP";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #777bb4;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.language-html {
+    background: #1e1e1e;
+    position: relative;
+}
+
+.language-html::before {
+    content: "HTML";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #e34c26;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.language-css {
+    background: #1e1e1e;
+    position: relative;
+}
+
+.language-css::before {
+    content: "CSS";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #1572b6;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.language-sql {
+    background: #1e1e1e;
+    position: relative;
+}
+
+.language-sql::before {
+    content: "SQL";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #e38c00;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Styles pour les terminaux */
+.language-bash.terminal,
+.terminal {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
+    position: relative;
+    border-radius: 8px;
+}
+
+.terminal::before {
+    content: "Terminal";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: #27ae60;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.terminal code {
+    color: #ecf0f1;
+}
+
+/* Prompts dans le terminal */
+.prompt {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.prompt-root {
+    /* color: #e74c3c; */
+    font-weight: bold;
+}
+
+.prompt-windows {
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Scrollbar pour les blocs de code */
+pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #2c3e50;
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: #34495e;
+    border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+    background: #4a6741;
+}
+
+/* Highlight pour les erreurs dans le code */
+.error-highlight {
+    background-color: rgba(231, 76, 60, 0.2);
+    border-left: 4px solid #e74c3c;
+    padding: 2px 8px;
+    margin: 2px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Highlight pour les succès dans le code */
+.success-highlight {
+    background-color: rgba(46, 204, 113, 0.2);
+    border-left: 4px solid #2ecc71;
+    padding: 2px 8px;
+    margin: 2px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Commentaires dans le code */
+.comment {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Listes améliorées */
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    position: relative;
+    padding: 8px 0 8px 25px;
+    margin: 8px 0;
+}
+
+
+
+/* Listes avec éléments en surbrillance */
+/* .highlight,
+li:has(strong) {
+    background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
+    border-radius: 5px;
+    padding: 10px 10px 10px 35px;
+    border-left: 4px solid #3498db;
+} */
+
+/* .highlight::before {
+    color: #e74c3c;
+    content: "★";
+} */
+
+/* Tableaux */
+.data-table,
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header,
+th {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.table-cell,
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ecf0f1;
+    transition: background-color 0.2s;
+}
+
+td:hover {
+    background-color: #f8f9fa;
+}
+
+/* Éléments interactifs */
+strong {
+    /* color: #e74c3c; */
+    font-weight: 600;
+}
+
+code:not(pre code) {
+    background-color: #f1f2f6;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+    color: #c7254e;
+    border: 1px solid #e1e8ed;
+}
+
+/* Emojis et icônes */
+.emoji {
+    font-size: 1.2em;
+    margin: 0 5px;
+}
+
+/* Design responsive */
+@media (max-width: 768px) {
+    .cours-section {
+        padding: 15px;
+    }
+    
+    h3 {
+        font-size: 1.3em;
+    }
+    
+    h4 {
+        font-size: 1.1em;
+    }
+    
+    pre code {
+        font-size: 12px;
+        padding: 15px;
+    }
+    
+    .table-header,
+    .table-cell {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .cours-section {
+        padding: 10px;
+    }
+    
+    h3 {
+        font-size: 1.2em;
+    }
+    
+    pre {
+        margin: 15px -10px;
+        border-radius: 0;
+    }
+    
+    .data-table {
+        font-size: 0.8em;
+    }
+}
+
+/* Animations et transitions */
+.code-block,
+pre {
+    transition: box-shadow 0.3s ease;
+}
+
+.code-block:hover,
+pre:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+h3, h4 {
+    transition: color 0.3s ease;
+}
+
+/* Mode sombre (optionnel) */
+@media (prefers-color-scheme: dark) {
+    .cours-section {
+        /* background-color: #1a1a1a; */
+        color: #e0e0e0;
+    }
+    
+    h3, h4 {
+        color: #4fc3f7;
+    }
+    
+    .code-block,
+    pre {
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        border-color: #444;
+    }
+    
+    code:not(pre code) {
+        background-color: #2d2d2d;
+        color: #ff6b9d;
+        border-color: #444;
+    }
+}
+
+/* Impression */
+@media print {
+    .cours-section {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+    
+    .code-block,
+    pre {
+        background: white !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    h3, h4 {
+        color: #000 !important;
+        break-after: avoid;
+    }
+}

@@ -114,6 +114,16 @@ try {
     $stats_projets = ['total' => 0, 'active' => 0];
 }
 
+try {
+    // Questionnaires (si table existe)
+    $stats_questionnaires = [
+        'total' => $pdo->query("SELECT COUNT(*) FROM questionnaire")->fetchColumn(),
+        'questions' => $pdo->query("SELECT COUNT(*) FROM questions")->fetchColumn()
+    ];
+} catch (PDOException $e) {
+    $stats_questionnaires = ['total' => 0, 'questions' => 0];
+}
+
 // Derniers messages
 try {
     $recent_messages = $pdo->query("
@@ -168,6 +178,7 @@ $system_info = [
                 <li><a href="admin" class="active">📊 Tableau de bord</a></li>
                 <li><a href="admin_candidatures.php">💼 Candidatures</a></li>
                 <li><a href="admin_messages.php">📧 Messages</a></li>
+                <li><a href="admin_questionnaires.php">📋 Questionnaires</a></li>
                 <li><a href="admin_projets.php">🚀 Projets</a></li>
                 <li><a href="admin_gallery.php">🖼️ Galerie</a></li>
                 <li><a href="admin_utilisateur.php">👤 Utilisateur</a></li>
@@ -220,6 +231,15 @@ $system_info = [
                     <div class="stat-label">Projets</div>
                     <div class="badge badge-success mt-sm">
                         <?= $stats_projets['active'] ?> actif(s)
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-value"><?= $stats_questionnaires['total'] ?></div>
+                    <div class="stat-label">Questionnaires</div>
+                    <div class="badge badge-info mt-sm">
+                        <?= $stats_questionnaires['questions'] ?> questions
                     </div>
                 </div>
                 

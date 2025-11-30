@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once "config.php";
 
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
@@ -28,6 +28,46 @@ try {
     exit;
 }
 ?>
+
+<!-- Inclusion des styles CSS pour le contenu chargé en AJAX -->
+<style>
+/* Styles essentiels pour les blocs de code dans la modal */
+.cours-section {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Styles de base pour les blocs de code */
+.cours-section pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 1.5rem 0;
+}
+
+.cours-section pre code {
+    font-family: 'Fira Code', 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    color: #d4d4d4;
+    background: none;
+}
+
+.cours-section code {
+    background: #f4f4f4;
+    
+    font-family: 'Fira Code', 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+/* Style pour le contenu highlight */
+
+</style>
 
 <div class="cours-detail">
     <div class="cours-header">
@@ -93,7 +133,7 @@ try {
     <?php if (!empty($cours["contenu"])): ?>
     <div class="cours-contenu">
         <h3><i class="fas fa-book-open"></i> Contenu principal</h3>
-        <div class="contenu-html">
+        <div class="contenu-html cours-section">
             <?= $cours["contenu"] ?>
         </div>
     </div>
@@ -112,7 +152,7 @@ try {
                         </h4>
                     </div>
                     
-                    <div class="section-content">
+                    <div class="section-content cours-section">
                         <?= $section["contenu"] ?>
                     </div>
                     
@@ -368,67 +408,6 @@ try {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
-.contenu-html p {
-    margin-bottom: 1.2rem;
-    line-height: 1.8;
-    font-size: 1.05rem;
-}
-
-.contenu-html h1, .contenu-html h2, .contenu-html h3, .contenu-html h4 {
-    color: #2d3748;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.contenu-html ul, .contenu-html ol {
-    margin-left: 1.5rem;
-    margin-bottom: 1.2rem;
-}
-
-.contenu-html li {
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
-}
-
-.contenu-html table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    font-size: 0.95rem;
-}
-
-.contenu-html th, .contenu-html td {
-    border: 1px solid #e2e8f0;
-    padding: 0.75rem;
-    text-align: left;
-}
-
-.contenu-html th {
-    background: #f7fafc;
-    font-weight: 600;
-    color: #4a5568;
-}
-
-.contenu-html pre {
-    background: #1a202c;
-    color: #e2e8f0;
-    padding: 1.5rem;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-family: 'Fira Code', 'Monaco', 'Courier New', monospace;
-    margin: 1.5rem 0;
-}
-
-.contenu-html code {
-    background: #1a202c;
-    color: #e2e8f0;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-family: 'Fira Code', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9rem;
-}
-
 .cours-sections h3 {
     color: #1a365d;
     font-size: 1.8rem;
@@ -441,10 +420,10 @@ try {
     padding-bottom: 0.5rem;
 }
 
-.sections-container {
+/* .sections-container {
     display: grid;
     gap: 2rem;
-}
+} */
 
 .section-card {
     background: white;
@@ -492,16 +471,6 @@ try {
     flex-shrink: 0;
 }
 
-.section-type {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
 .section-content {
     padding: 2rem;
     font-size: 1.05rem;
@@ -537,8 +506,6 @@ try {
     align-items: center;
     gap: 0.5rem;
 }
-
-
 
 .code-example pre {
     margin: 0;
@@ -610,7 +577,6 @@ try {
         padding: 1.5rem;
     }
     
-    .contenu-html,
     .section-content {
         padding: 1.5rem;
     }
@@ -637,67 +603,4 @@ try {
         gap: 1rem;
     }
 }
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.section-card {
-    animation: fadeInUp 0.8s ease forwards;
-}
-
-.section-card:nth-child(1) { animation-delay: 0.1s; }
-.section-card:nth-child(2) { animation-delay: 0.2s; }
-.section-card:nth-child(3) { animation-delay: 0.3s; }
-.section-card:nth-child(4) { animation-delay: 0.4s; }
-.section-card:nth-child(5) { animation-delay: 0.5s; }
-
-.objectifs, .prerequis {
-    animation: slideInLeft 0.6s ease forwards;
-}
-
-.objectifs { animation-delay: 0.2s; }
-.prerequis { animation-delay: 0.4s; }
 </style>
-
-<script>
-// Animation observer for smooth transitions
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-document.querySelectorAll('.section-card, .objectifs, .prerequis').forEach(el => {
-    observer.observe(el);
-});
-</script>
-
-</body>
-</html>
