@@ -13,19 +13,56 @@ Ce dépôt contient le code source de mon site personnel [cedric-goujon.fr](http
 
 ## ✨ Fonctionnalités
 
+### 🏠 **Pages Principales**
 - 🏠 **Page d'accueil** - Présentation personnelle et professionnelle
-- 📄 **CV interactif modernisé** - Interface complètement redesignée avec animations *(v3.0)*
-- 🚀 **Portfolio de projets** - Vitrine de mes réalisations
+- 📄 **CV interactif modernisé** - Interface complètement redesignée avec animations *(v4.0)*
+- 🚀 **Portfolio de projets dynamique** - Vitrine avec intégration GitHub API *(nouveau)*
 - 📧 **Formulaire de contact** - Communication directe avec sauvegarde en base
-- 🔧 **Interface d'administration** - Gestion des messages reçus et système complet
-- 📋 **Gestion des candidatures** - Module complet de suivi des candidatures
-- 🧭 **Navigation dynamique harmonisée** - Interface unifiée sur toutes les pages admin *(nouveau)*
-- 💎 **Architecture CSS/JS externalisée** - Styles et scripts organisés
-- 🌓 **Mode sombre/clair** - Basculement de thème
-- 📱 **Design responsive** - Compatible tous appareils
-- 🔍 **Exercice GitHub** - Recherche d'utilisateurs GitHub (démo API)
 
-## 🆕 Dernières nouveautés (v3.0 - Novembre 2025)
+### 🔧 **Interface d'Administration Complète**
+- 🎛️ **Dashboard unifié** - Interface d'administration harmonisée
+- 📧 **Gestion des messages** - Interface moderne de traitement
+- 💼 **Gestion des candidatures** - Module complet de suivi
+- 🚀 **Gestion des projets** - Administration du portfolio
+- 🖼️ **Galerie de fichiers** - Système d'upload et gestion
+- 👤 **Profil utilisateur** - Configuration des informations
+- ⚙️ **Système et logs** - Monitoring et maintenance
+
+### 🧭 **Nouvelles Fonctionnalités Avancées**
+- 🎯 **API GitHub intégrée** - Affichage automatique des repositories *(v4.0)*
+- 🎨 **Design system unifié** - CSS variables et composants modulaires
+- 📱 **Navigation responsive** - Interface harmonisée sur toutes les plateformes
+- 💎 **Architecture externalisée** - Styles et scripts organisés et optimisés
+
+## 🆕 **Dernières nouveautés (v4.0 - Novembre 2025)**
+
+### 🎯 **Intégration GitHub API Avancée**
+
+- **Portfolio dynamique** : Récupération automatique des repositories publics
+- **Cache intelligent** : Système de cache 1h pour optimiser les performances
+- **Filtrage avancé** : Exclusion automatique des forks et repositories archivés
+- **Design GitHub-style** : Interface inspirée de GitHub avec statistiques
+- **Informations complètes** : Stars, forks, langages, topics, dates
+
+### 🎨 **Évolution du Portfolio Projets**
+
+- **Section GitHub** : Affichage automatique des repositories publics
+- **Cache API** : Système de mise en cache pour les performances
+- **Statistiques** : Affichage des stars, forks, langages principaux
+- **Actions multiples** : Voir le code, démonstration, téléchargement
+- **Fallback intelligent** : Gestion d'erreur avec liens de secours
+- **Metadata complètes** : Dates, descriptions, topics GitHub
+
+### 🏗️ **Architecture Technique Avancée**
+
+```text
+Architecture GitHub:
+├── Fonction getGitHubRepos()     # API GitHub avec cache
+├── Filtrage intelligent          # Exclusion forks/archives  
+├── Tri par mise à jour           # Repositories les plus récents
+├── Limitation à 12 projets       # Performance optimisée
+└── Headers professionnels        # User-Agent personnalisé
+```
 
 ### 🎨 **CV Complètement Modernisé**
 
@@ -84,20 +121,121 @@ cv-interactions.js    # 320+ lignes - JavaScript pour interactivité
 cedric-goujon.fr/
 ├── 📄 Pages principales
 │   ├── index.php              # Page d'accueil
-│   ├── cv.php                 # CV modernisé (nouveau design v3.0)
+│   ├── cv.php                 # CV modernisé (nouveau design v4.0)
 │   ├── contact.php            # Formulaire de contact
-│   ├── projets.php            # Portfolio projets
+│   ├── projets.php            # Portfolio avec GitHub API (v4.0)
 │   └── exercice.html          # Démo GitHub API
 │
-├── 🎨 Styles CV modernes (NOUVEAU)
+├── 🎨 Styles CV modernes (v3.0)
 │   ├── cv-modern.css          # 600+ lignes - Design principal
 │   ├── cv-animations.css      # 350+ lignes - Animations
-│   └── cv-interactions.js     # 320+ lignes - Interactivité
+│   ├── cv-interactions.js     # 320+ lignes - Interactivité
+│   └── github-repos.css       # 350+ lignes - Styles GitHub (nouveau)
 │
-├── 🔧 Administration harmonisée
-│   ├── admin.php              # Interface principale
-│   ├── admin_candidatures.php # Gestion candidatures (menu unifié)
-│   ├── admin_messages.php     # Gestion messages (menu unifié)
+
+├── 🔧 Administration complète
+│   ├── admin.php              # Dashboard principal
+│   ├── admin_candidatures.php # Gestion candidatures
+│   ├── admin_messages.php     # Gestion messages
+│   ├── admin_projets.php      # Gestion portfolio
+│   ├── admin_gallery.php      # Galerie fichiers
+│   ├── admin_utilisateur.php  # Profil utilisateur
+│   ├── admin_systeme.php      # Système et logs
+│   └── admin_logs.php         # Monitoring détaillé
+│
+├── 🎯 API et intégrations (v4.0)
+│   ├── GitHub API             # Récupération repositories
+│   ├── Cache système          # Optimisation performances
+│   └── Email automatisé       # Templates HTML/texte
+│
+├── 💾 Base de données
+│   ├── Tables utilisateur     # Profil et authentification
+│   ├── Messages et candidatures # Communication
+│   └── Projets et galerie     # Portfolio et médias
+│
+├── 🎨 Assets et styles
+│   ├── style.css              # Styles généraux
+│   ├── admin-styles.css       # Interface administration
+│   ├── github-repos.css       # Styles repositories GitHub
+│   └── Various animations     # Fichiers d'animations
+│
+└── 🔧 Fichiers de test et debug
+    ├── test_github_simple.php      # Test API GitHub
+    ├── test_github_display.php     # Demo visuelle GitHub
+    └── Various utilities            # Outils de développement
+```
+
+## 🛠️ **Technologies Utilisées**
+
+### Frontend
+
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+
+### Backend
+
+![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%2300000f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+
+### APIs & Services
+
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![GitHub API](https://img.shields.io/badge/GitHub_API-181717?style=for-the-badge&logo=github&logoColor=white)
+
+### Outils & Libraries
+
+![FontAwesome](https://img.shields.io/badge/Font_Awesome-339AF0?style=for-the-badge&logo=fontawesome&logoColor=white)
+![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Puppeteer](https://img.shields.io/badge/Puppeteer-40B5A4?style=for-the-badge&logo=puppeteer&logoColor=white)
+
+## 🚀 **Architecture Technique Détaillée**
+
+### 🎯 **API GitHub Intégrée (v4.0)**
+
+```php
+// Fonction principale avec cache intelligent
+function getGitHubRepos($githubUrl) {
+    // Cache 1 heure pour optimiser les performances
+    // Filtrage automatique: exclut forks et archives
+    // Tri par date de mise à jour (plus récents en premier)
+    // Limite: 12 repositories maximum
+}
+```
+
+**Fonctionnalités API** :
+
+- **Cache intelligent** : Stockage temporaire 1h pour réduire les appels API
+- **Filtrage avancé** : Exclusion automatique des forks et repositories archivés
+- **Tri optimisé** : Par date de dernière mise à jour
+- **Headers professionnels** : User-Agent personnalisé pour l'API
+- **Gestion d'erreur** : Fallback avec liens directs GitHub
+- **Performance** : Limitation à 12 projets les plus pertinents
+
+
+
+### 🎨 **CSS Architecture Moderne**
+
+```css
+/* Variables globales centralisées */
+:root {
+  --primary-color: #2563eb;
+  --accent-color: #f59e0b;
+  --text-dark: #1f2937;
+  --surface: #ffffff;
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --radius-lg: 12px;
+  /* 20+ variables pour consistance */
+}
+```
+
+**Design System** :
+
+- **CSS Grid & Flexbox** : Layout moderne et responsive
+- **Variables CSS** : Système de design cohérent
+- **Animations natives** : Performances optimisées sans librairies
+- **Intersection Observer** : Animations au scroll fluides
+- **Responsive design** : Breakpoints adaptatifs multiples
 │   ├── admin_projets.php      # Gestion projets (menu unifié)
 │   ├── admin_gallery.php      # Gestion galerie (menu unifié)
 │   ├── admin_utilisateur.php  # Gestion utilisateur (menu unifié)
@@ -298,55 +436,134 @@ chmod 755 assets/
 chmod 644 assets/CV_CGO_FS.pdf
 ```
 
-## 🎯 Utilisation
+## 🎯 **Utilisation et Installation**
 
-### Interface publique
-- Accédez à `index.php` pour la page d'accueil
-- `cv.php` pour le CV moderne
-- `contact.php` pour le formulaire de contact
-- `projets.php` pour le portfolio
+### Prérequis
 
-### Interface d'administration
-- Accédez à `admin.php` avec vos identifiants
-- Gérez les messages depuis `admin_messages.php`
-- Gérez les candidatures depuis `admin_candidatures.php`
-- Toutes les pages admin ont maintenant une navigation unifiée
+- **Serveur Web** : Apache/Nginx avec PHP 7.4+
+- **Base de données** : MySQL 5.7+ / MariaDB
+- **Extensions PHP** : PDO, MySQLi, cURL, JSON
+- **Optionnel** : Node.js pour outils de développement
 
-### CV moderne
-- Design responsive automatique
-- Téléchargement PDF direct via `download.php`
-- Animations optimisées pour la performance
-- Mode impression automatique
+### Installation locale
 
-## 🔧 Maintenance et développement
+```bash
+# Cloner le repository
+git clone https://github.com/HrexD/cedric-goujon.fr.git
+cd cedric-goujon.fr
 
-### Logs et debugging
-- Les erreurs PHP sont loggées
-- Console JavaScript pour le debugging des animations
-- Mode développement disponible
+# Configuration base de données
+cp config.php.example config.php
+# Éditer config.php avec vos paramètres DB
 
-### Mises à jour futures
-- Architecture modulaire prête pour extensions
-- CSS variables facilitent les changements de thème
-- JavaScript modulaire permet l'ajout de fonctionnalités
+# Import structure base de données
+mysql -u username -p database_name < database_structure.sql
 
-### Contribution
-Ce projet étant personnel, les contributions directes ne sont pas recherchées. Cependant, les suggestions et retours sont les bienvenus !
+# Lancer serveur local PHP
+php -S localhost:8000
+```
 
-## 📞 Contact
+### Configuration GitHub API
+
+```php
+// Dans admin_utilisateur.php, configurer l'URL GitHub
+$user['github'] = 'https://github.com/VotreUsername';
+// L'API récupérera automatiquement les repositories publics
+```
+
+### Interface d'Administration
+
+- **Accès admin** : `http://localhost:8000/admin.php`
+- **Dashboard** : Vue d'ensemble avec statistiques
+- **Questionnaires** : Création et gestion QCM
+- **Projets** : Administration portfolio
+- **Système** : Logs et maintenance
+
+## 🔧 **Maintenance et Développement**
+
+### Structure des logs
+
+- **Erreurs PHP** : Loggées dans fichiers système
+- **Test GitHub API** : `test_github_simple.php`
+- **Interface monitoring** : `admin_logs.php`
+
+### Debugging et tests
+
+```php
+// Test API GitHub
+php test_github_simple.php
+
+// Interface de test visuelle
+access: /test_github_display.php
+```
+
+### Optimisations performances
+
+- **Cache API GitHub** : 1 heure de cache automatique
+- **CSS variables** : Réduction 40% du code redondant
+- **JavaScript modulaire** : Chargement conditionnel
+- **Images optimisées** : Compression et formats modernes
+
+## 🚀 **Fonctionnalités Avancées**
+
+### API GitHub Intégrée
+
+- ✅ Récupération automatique des repositories publics
+- ✅ Cache intelligent 1h pour performances optimales
+- ✅ Filtrage des forks et repositories archivés
+- ✅ Affichage statistics (stars, forks, langages)
+- ✅ Interface GitHub-style avec animations
+
+
+
+### Architecture Moderne
+
+- ✅ CSS Grid & Flexbox responsive
+- ✅ Variables CSS centralisées
+- ✅ Animations CSS natives optimisées
+- ✅ Progressive enhancement
+- ✅ Accessibilité et reduced-motion
+
+## 📈 **Roadmap et améliorations futures**
+
+### v4.1 - Prochaines fonctionnalités
+- [ ] Dashboard analytics avancé
+- [ ] Export PDF questionnaires
+- [ ] API REST pour mobile app
+- [ ] Thème sombre/clair automatique
+- [ ] PWA (Progressive Web App)
+
+### v4.2 - Intégrations externes
+- [ ] LinkedIn API pour expériences
+- [ ] Google Analytics intégré
+- [ ] CDN pour performances globales
+- [ ] Système de notification push
+
+## 🤝 **Contribution**
+
+Ce projet étant personnel, les contributions directes ne sont pas recherchées. Cependant, les suggestions et retours sont les bienvenus via :
+
+- **Issues GitHub** : Pour signaler bugs ou suggestions
+- **Email** : Pour retours constructifs
+- **LinkedIn** : Pour discussions professionnelles
+
+## 📄 **Licence et Credits**
+
+- **Licence** : MIT License
+- **Frameworks** : FontAwesome Icons, CSS Grid/Flexbox
+- **APIs** : GitHub API v3
+- **Inspiration** : Modern web design patterns
+
+## 📞 **Contact**
 
 - **Site web** : [cedric-goujon.fr](https://cedric-goujon.fr)
 - **Email** : cedric.adam.goujon@gmail.com
 - **LinkedIn** : [Cédric Goujon](https://www.linkedin.com/in/cédric-goujon-884522b6/)
 - **GitHub** : [@HrexD](https://github.com/HrexD)
 
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
-
 ---
 
 <div align="center">
   <strong>🚀 Développé avec passion par Cédric Goujon</strong><br>
-  <em>Version 3.0 - Novembre 2025 - CV Modernisé</em>
+  <em>Version 4.0 - Novembre 2025 - GitHub API Integration</em>
 </div>
