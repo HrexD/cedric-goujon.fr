@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Citations Inspirantes{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Trouvez votre inspiration quotidienne</h1>
+        <p class="hero-subtitle">Découvrez des citations qui transforment votre journée et nourrissent votre âme</p>
+        <div class="hero-buttons">
+            <a href="{{ path('app_quotes') }}" class="btn btn-primary btn-lg">📋 Explorer toutes les citations</a>
+            <a href="{{ path('app_add_quote') }}" class="btn btn-secondary btn-lg">✨ Partager une citation</a>
+        </div>
+    </div>
+</section>
+
+<!-- Citation du jour -->
+<section class="daily-quote-section">
+    <div class="section-container">
+        <h2 class="section-title">🌅 Citation du jour</h2>
+        <div class="quote-display">
+            <div class="quote-text">{{ quote }}</div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistiques -->
+<section class="stats-section">
+    <div class="section-container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-number">{{ quotes|length }}</div>
+                <div class="stat-label">Citations disponibles</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="section-container">
+        <div class="cta-content">
+            <h2 class="cta-title">Prêt à commencer votre voyage inspirant ?</h2>
+            <p class="cta-description">Rejoignez des milliers de personnes qui trouvent leur motivation quotidienne grâce à nos citations.</p>
+            <a href="{{ path('app_quotes') }}" class="btn btn-primary btn-xl">🎆 Commencer maintenant</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
