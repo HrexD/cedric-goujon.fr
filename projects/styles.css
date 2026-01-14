@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;700&display=swap');
+
+:root {
+    --bg: linear-gradient(135deg, #101728 0%, #0f2039 35%, #0a3c5f 100%);
+    --card: #0f1b30;
+    --accent: #5bd1ff;
+    --accent-strong: #8ef0b6;
+    --text: #e9f1ff;
+    --muted: #7f90ad;
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    --radius: 18px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Manrope', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    padding: 32px;
+}
+
+a {
+    text-decoration: none;
+}
+
+main {
+    width: min(960px, 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.00));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: calc(var(--radius) + 6px);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(6px);
+}
+
+.hero {
+    margin-bottom: 28px;
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 8px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--muted);
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.project-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    background: var(--card);
+    border-radius: var(--radius);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.project-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(91, 209, 255, 0.5);
+    box-shadow: 0 18px 40px rgba(91, 209, 255, 0.24);
+}
+
+.project-name {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.project-arrow {
+    font-size: 20px;
+    color: var(--accent);
+}
+
+.empty-state {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

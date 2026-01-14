@@ -2,6 +2,10 @@
 require_once 'config.php';
 require_once 'auth_helper.php';
 
+// Redirige cette page vers l'accueil
+header('Location: /');
+exit;
+
 // Gestion des filtres
 $langage_filter = $_GET['langage'] ?? '';
 $niveau_filter = $_GET['niveau'] ?? '';

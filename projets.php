@@ -23,17 +23,8 @@ function getGitHubRepos($githubUrl) {
     if (preg_match('/github\.com\/([^\/?]+)/', $githubUrl, $matches)) {
         $username = $matches[1];
         
-        // Cache simple pour éviter trop de requêtes API
-        $cacheFile = sys_get_temp_dir() . "/github_repos_{$username}.json";
-        $cacheTime = 3600; // 1 heure
-        
-        // Vérifier si le cache est valide
-        if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTime) {
-            $cachedData = file_get_contents($cacheFile);
-            return json_decode($cachedData, true);
-        }
-        
-        $apiUrl = "https://api.github.com/users/{$username}/repos?sort=updated&direction=desc&per_page=20";
+        // Pas de cache pour toujours voir les derniers push
+        $apiUrl = "https://api.github.com/users/{$username}/repos?sort=updated&direction=desc&per_page=100";
         
         // Configuration du contexte pour l'API GitHub
         $context = stream_context_create([
@@ -63,12 +54,6 @@ function getGitHubRepos($githubUrl) {
                 usort($filteredRepos, function($a, $b) {
                     return strtotime($b['updated_at']) - strtotime($a['updated_at']);
                 });
-                
-                // Limiter à 12 repositories
-                $filteredRepos = array_slice($filteredRepos, 0, 12);
-                
-                // Mettre en cache
-                file_put_contents($cacheFile, json_encode($filteredRepos));
                 
                 return $filteredRepos;
             }
@@ -140,6 +125,8 @@ if (!empty($user['github'])) {
             <span>Voir sur GitHub</span>
           </a>
         </div>
+     
+
       </div>
     </section>
     <!-- Main Content -->

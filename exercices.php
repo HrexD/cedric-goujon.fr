@@ -1,6 +1,10 @@
 <?php
 require 'config.php';
 
+// Redirige cette page vers l'accueil
+header('Location: /');
+exit;
+
 // Récupération des paramètres de filtrage
 $langage_filter = $_GET['langage'] ?? '';
 $difficulte_filter = $_GET['difficulte'] ?? '';
